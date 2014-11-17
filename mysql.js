@@ -61,7 +61,7 @@ function Top5Tags() {
 }
 
 setInterval(function RevomeLeastUsed() {
-    connection.query('DELETE FROM `hashtags` WHERE `times`  < 5', function (err, rows) {
+    connection.query('DELETE FROM `hashtags` WHERE `times`  < 10', function (err, rows) {
         console.log("removed unused rows");
     });
 }, 300000);
