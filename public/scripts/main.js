@@ -5,11 +5,6 @@
 
         socket.on('new tweet', function (tweet) {
             AtToHTMLPage(tweet);
-            // var html = generateRow(tweet);
-            // $("#tblBody").append(html);
-
-            // console.log(tweet)
-            // $('#tweet_logs').append(tweet.user.name);
         });
     });
 
@@ -31,9 +26,6 @@
         str += "<td>" + el.timestamp_ms + "</td>";
         str += "</tr>";
         return str;
-        var socket = io.connect();
-        //socket.on('new insert',function(el));
-
         //}
     }
 
@@ -50,7 +42,6 @@
                     friends += el[i].screen_name + ", ";
             }
         }
-
         return friends;
 
     }
