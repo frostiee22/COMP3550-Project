@@ -1,0 +1,11 @@
+{
+  "name": "nodexpr",
+  "version": "0.0.0",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.2.0",
+    "twit": "^1.1.18",
+    "mysql": "^2.5.2"
+  },
+  "main": "main.js"
+}
