@@ -15,13 +15,17 @@ http.listen(port, function () {
 
 app.use(express.static(__dirname + '/public'));
 
+
+//mysql file
+var mysqldb = require('./mysql');
+
+
 // https://github.com/ttezel/twit
 var stream = twitter.stream('statuses/sample', {
     language: 'en'
 });
 
-//mysql file
-var mysqldb = require('./mysql');
+
 
 io.on('connection', function (socket) {
     console.log('User connected ... Starting Stream connection');
@@ -31,6 +35,7 @@ io.on('connection', function (socket) {
         //When Stream is received from twitter
         io.emit('new tweet', tweet); //Send to client via a push
         mysqldb.CountHashTags(tweet);
+
     });
 
     // socket.on('insert',function(insert){
@@ -42,6 +47,28 @@ io.on('connection', function (socket) {
         stream.stop();
     });
 });
+
+
+
+//Method 1
+app.get("/api/tags", function (req, res) {
+    // to do read values from database
+    //send values read to client using res.send or res.json
+    var query = mysqldb.Top5Tags();
+    res.json(query);
+
+});
+
+
+//var interId = setInterval(function () {
+//    //
+//    var dataFromServer = dataRead();
+//    mysqldb.read(function (data) {
+//        io.emit('tags', data);
+//    })
+//
+//
+//}, 500);
 
 
 

@@ -5,8 +5,27 @@
 
         socket.on('new tweet', function (tweet) {
             AtToHTMLPage(tweet);
+
+            // formatting table
+            var tId = "mainTbl",
+                $tbl = $("#" + tId);
+            $tbl.dataTable();
+
+
         });
+
+
+
+
     });
+
+
+    //function db(callback) {
+    //    $.get("/api/tags", function (data) {
+    //        console.log(data.length);
+    //        callback(data);
+    //    });
+    //}
 
 
     function AtToHTMLPage(tweet) {
@@ -45,6 +64,16 @@
         return friends;
 
     }
+
+    function loadAllRecs(callback) {
+        $.get("/api/top5tags", function (data) {
+            console.log(data.length);
+            callback(data);
+        });
+    }
+
+
+
 
 
 }(this));

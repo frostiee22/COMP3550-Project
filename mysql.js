@@ -2,10 +2,21 @@ var mysql = require("mysql"),
     //crypto = require('crypto'),
     connection;
 
+
+// local database
+//connection = mysql.createConnection({
+//    host: "localhost",
+//    user: "comp3550project",
+//    password: "password",
+//    database: "comp3550project"
+//});
+
+
+// online database
 connection = mysql.createConnection({
-    host: "localhost",
+    host: "www.db4free.net",
     user: "comp3550project",
-    password: "password",
+    password: "password123",
     database: "comp3550project"
 });
 
@@ -16,7 +27,8 @@ connection.connect(function (err) {
     }
     console.log("Successfully connected to the database");
     //Top5Tags();
-    //retrieveEntities();
+    //RetrieveEntities();
+    //RevomeLeastUsed(1000);
 });
 
 
@@ -47,7 +59,7 @@ function CountHashTags(tweet) {
 }
 
 
-function retrieveEntities() {
+function RetrieveEntities() {
     connection.query('SELECT * FROM `hashtags`', function (err, rows) {
         console.log("Found %d records ", rows.length);
         console.log(rows);
@@ -56,18 +68,58 @@ function retrieveEntities() {
 
 function Top5Tags() {
     connection.query('SELECT * FROM `hashtags` group by `times`desc ORDER BY `times` DESC limit 0,5', function (err, rows) {
-        console.log(rows);
+        return toJSON(rows);
     });
 }
 
-setInterval(function RevomeLeastUsed() {
-    connection.query('DELETE FROM `hashtags` WHERE `times`  < 10', function (err, rows) {
-        console.log("removed unused rows");
+//setInterval(function RevomeLeastUsed() {
+//    connection.query('DELETE FROM `hashtags` WHERE `times`  < 20', function (err, rows) {
+//        console.log("removed unused rows");
+//
+//    });
+//}, 600000);
+
+function RevomeLeastUsed(num) {
+    connection.query('DELETE FROM `hashtags` WHERE `times`  < "' + num + "';", function (err, rows) {
+        console.log("removed rows");
+
     });
-}, 300000);
+}
+
+function toJSON(el) {
+    var friends = "[";
+    for (var i = 0; el.length > i; i++) {
+        if (el.length === 1) {
+            friends += '{" tag " : "';
+            friends += el[i].tag;
+            friends += '" , "times : "';
+            friends += el[i].times;
+            friends += '"}'
+        } else {
+            if (el.length === i + 1) {
+                friends += '{" tag " : "';
+                friends += el[i].tag;
+                friends += '" , "times : "';
+                friends += el[i].times;
+                friends += '"}'
+            } else {
+                friends += '{" tag " : "';
+                friends += el[i].tag;
+                friends += '" , "times : "';
+                friends += el[i].times;
+                friends += '"},'
+            }
+        }
+    }
+    friends += "]";
+    return friends;
+
+}
 
 
 
 
 exports.CountHashTags = CountHashTags;
-exports.retrieveEntities = retrieveEntities;
+exports.RevomeLeastUsed = RevomeLeastUsed;
+exports.RetrieveEntities = RetrieveEntities;
+exports.Top5Tags = Top5Tags;
