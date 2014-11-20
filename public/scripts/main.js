@@ -3,11 +3,12 @@
     $(document).ready(function () {
         var socket = io.connect();
 
-        socket.on('new tweet', function (tweet) {
-
-            // incomming twitter stream form the server
-
-        });
+        //socket.on('new tweet', function (tweet) {
+        //
+        //    // incomming twitter stream form the server
+        //
+        //
+        //});
 
         loadAllRecs(function (data) {
             populateTable(data);
