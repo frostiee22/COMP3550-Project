@@ -10,6 +10,7 @@ var express = require('express'),
     mysql = require("mysql"),
     crypto = require('crypto'),
     connection,
+    salt = "12AxBy98",
     port = 3000;
 
 
@@ -22,6 +23,12 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+app.use(session({
+    secret: "sadf3234",
+    cookie: {
+        secure: true
+    }
+}));
 
 
 
@@ -31,22 +38,22 @@ app.use(bodyParser.urlencoded({
 
 
 //local database
-//connection = mysql.createConnection({
-//    host: "localhost",
-//    user: "comp3550project",
-//    password: "password",
-//    database: "comp3550project"
-//});
+connection = mysql.createConnection({
+    host: "localhost",
+    user: "comp3550project",
+    password: "password",
+    database: "comp3550project"
+});
 
 
 
 // online database
-connection = mysql.createConnection({
-    host: "www.db4free.net",
-    user: "comp3550project",
-    password: "password123",
-    database: "comp3550project"
-});
+//connection = mysql.createConnection({
+//    host: "www.db4free.net",
+//    user: "comp3550project",
+//    password: "password123",
+//    database: "comp3550project"
+//});
 
 connection.connect(function (err) {
     if (err) {
@@ -83,7 +90,9 @@ io.on('connection', function (socket) {
     stream.on('tweet', function (tweet) {
         //When Stream is received from twitter
         io.emit('new tweet', tweet); //Send to client via a push
-        //CountHashTags(tweet);
+
+        //setTimeout(CountHashTags(tweet), 8000);
+        CountHashTags(tweet);
 
     });
 
@@ -100,16 +109,6 @@ io.on('connection', function (socket) {
 
     });
 
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 });
 
 
@@ -122,27 +121,29 @@ function CountHashTags(tweet) {
 
     var el = tweet.entities;
 
-    if (tweet.entities.hashtags != null) {
-        var el = tweet.entities.hashtags;
+    if (tweet.entities != null) {
+        if (tweet.entities.hashtags != null) {
+            var el = tweet.entities.hashtags;
 
-        for (var i = 0; el.length > i; i++) {
-            var tag = el[i].text;
-            var sql = "INSERT INTO `hashtags` (`tag`) VALUES ('" + tag + "');";
+            for (var i = 0; el.length > i; i++) {
+                var tag = el[i].text;
+                var sql = "INSERT INTO `hashtags` (`tag`) VALUES ('" + tag + "');";
 
-            connection.query(sql, function (err, result) {
-                if (err) {
-                    var update = "UPDATE `hashtags` set `times` =  `times`+1  where `tag` = '" + tag + "';";
-                    connection.query(update, function (err, result) {
-                        if (err) {
-                            return err;
-                        }
-                        // was UPDATED
-                    });
-                    // ERROR updating
-                    return err;
-                }
-                //console.log("Inserted record with id" + result.insertId);
-            });
+                connection.query(sql, function (err, result) {
+                    if (err) {
+                        var update = "UPDATE `hashtags` set `times` =  `times`+1  where `tag` = '" + tag + "';";
+                        connection.query(update, function (err, result) {
+                            if (err) {
+                                return err;
+                            }
+                            // was UPDATED
+                        });
+                        // ERROR updating
+                        return err;
+                    }
+                    //console.log("Inserted record with id" + result.insertId);
+                });
+            }
         }
     }
 }
@@ -207,14 +208,15 @@ app.get('/api/hashtags/top15tags', function (req, res) {
 function checkAuth(req, res, next) {
     if (!req.session.user_id) {
         res.send(401, "You are not authorized to view this page");
+        res.redirect("/index.html");
     } else {
         next();
     }
 }
 
-app.get("/priviledge", checkAuth, function (req, res) {
-    res.redirect("/index.html");
-})
+app.get('/home', checkAuth, function (req, res) {
+    res.send("priviledge page");
+});
 
 app.post('/register', function (req, res) {
     var newuser = {};
@@ -225,16 +227,22 @@ app.post('/register', function (req, res) {
     if (newuser.password1 == newuser.password2) {
         if (checkIfUserExist(newuser.username)) {
             console.log("user " + newuser.username + " exist");
+            res.send("user " + newuser.username + " exist");
         } else {
-            var salt = "12AxBy98";
             addUser(newuser.username, newuser.password1, salt, 0);
             res.redirect('/login.html');
         }
     } else {
         console.log("passwords do not match up");
-        res.redirect('/register.html');
+        res.send("passwords do not match up");
+        //res.redirect('/register.html');
     }
 });
+
+app.get('/logout', function (req, res) {
+    delete req.session.user_id;
+    res.redirect('/');
+})
 
 
 app.post('/login', function (req, res) {
@@ -242,10 +250,10 @@ app.post('/login', function (req, res) {
     user.username = req.body.loginName;
     user.password = req.body.loginPassword;
 
-    CheckLogin(user.username, user.password, res);
-
-
+    CheckLogin(user.username, user.password, req, res);
 });
+
+
 
 
 function addUser(username, password, salt, type) {
@@ -285,8 +293,7 @@ function checkIfUserExist(name) {
 }
 
 
-function CheckLogin(username, password, res) {
-    var salt = "12AxBy98";
+function CheckLogin(username, password, req, res) {
     password = crypto.createHash('sha1').update(password + salt).digest('hex');
 
     var sql = "SELECT `username`,`password` FROM `users` WHERE `username` =  '" + username + "'and `password` = '" + password + "';";
@@ -297,10 +304,16 @@ function CheckLogin(username, password, res) {
         } else {
             if (user[0] != null) {
                 console.log("user found");
-                res.redirect('/home/index.html');
+                req.session.user_id = 1;
+                req.session.save(function (err) {
+                    if (!err) {
+                        console.log("session saved");
+                    }
+                })
+                res.redirect('/home');
 
                 var loginstatus = "UPDATE `users` set `loginstatus` = 1 where `username` = '" + username + "' and `password` = '" + password + "';";
-                connection.query(loginstatus, function (err, updata) {
+                connection.query(loginstatus, function (err, update) {
                     if (err) {
                         console.log("Error occured " + err);
                     } else {
@@ -314,6 +327,18 @@ function CheckLogin(username, password, res) {
             }
         }
     });
+
+}
+
+function logout(username, res) {
+    var loginstatus = "UPDATE `users` set `loginstatus` = 0 where `username` = '" + username + "';";
+    connection.query(loginstatus, function (err, updata) {
+        if (err) {
+            console.log("Error occured " + err);
+        } else {
+            res.redirect("/");
+        }
+    })
 
 }
 

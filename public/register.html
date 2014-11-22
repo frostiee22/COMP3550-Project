@@ -32,31 +32,38 @@
 
     <div class="container">
 
-        <div class="container">
+        <div class="jumbotron">
+            <h1>#Tags</h1>
+            <p class="lead"></p>
+            <div class="btn-group">
+                <button id="startpage" type="button" class="btn btn-default">Start</button>
+                <button id="loginpage" type="button" class="btn btn-default">Login</button>
 
-            <div class="row">
-                <form method="POST" action="/register" class="form" role="form">
-                    <h2 class="form-signin-heading">Registration...</h2>
-                    <label for="inputEmail" class="sr-only">Username</label>
-                    <input type="text" name="loginName" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
-                    <br/>
-                    <label for="inputPassword1" class="sr-only">Password</label>
-                    <input type="password" name="loginPassword1" id="inputPassword1" class="form-control" placeholder="Password" required>
-                    <br/>
-                    <label for="inputPassword2" class="sr-only">Password</label>
-                    <input type="password" name="loginPassword2" id="inputPassword2" class="form-control" placeholder="Password" required>
-                    <br/>
-                    <button class="btn btn-lg btn-primary btn-block" name="reqister" id="submitlogin" type="submit">Register</button>
-                </form>
             </div>
-
-
-
         </div>
-        <!-- /container -->
+
+        <div class="row">
+            <form method="POST" action="/register" class="form" role="form">
+                <h2 class="form-signin-heading">Registration...</h2>
+                <label for="inputEmail" class="sr-only">Username</label>
+                <input type="text" name="loginName" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+                <br/>
+                <label for="inputPassword1" class="sr-only">Password</label>
+                <input type="password" name="loginPassword1" id="inputPassword1" class="form-control" placeholder="Password" required>
+                <br/>
+                <label for="inputPassword2" class="sr-only">Password</label>
+                <input type="password" name="loginPassword2" id="inputPassword2" class="form-control" placeholder="Password" required>
+                <br/>
+                <button class="btn btn-lg btn-primary btn-block" name="reqister" id="submitlogin" type="submit">Register</button>
+            </form>
+        </div>
+
 
 
     </div>
+    <!-- /container -->
+
+
 
 
     <!-- build:js(.) scripts/vendor.js -->

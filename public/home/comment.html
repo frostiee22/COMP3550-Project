@@ -16,7 +16,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="../styles/main.css" />
+    <link rel="stylesheet" href="../styles/comment.css" />
     <!-- endbuild -->
     <!-- build:js scripts/vendor/modernizr.js -->
     <script src="../bower_components/modernizr/modernizr.js"></script>
@@ -35,13 +35,13 @@
 
         <div class="header">
             <ul class="nav nav-pills pull-right">
-                <li class="active"><a href="index.html">Home</a>
+                <li><a href="index.html">Home</a>
                 </li>
                 <li><a href="#">TweetMap</a>
                 </li>
                 <li><a href="#">Stats</a>
                 </li>
-                <li><a href="comment.html">Coments</a>
+                <li class="active"><a href="comment.html">Coments</a>
                 </li>
             </ul>
             <h3 class="text-muted">Twitter Tags</h3>
@@ -60,38 +60,60 @@
             </div>
         </div>
 
+        <div class="detailBox">
+            <div class="titleBox">
+                <label>Comment Box</label>
+                <button type="button" class="close" aria-hidden="true">&times;</button>
+            </div>
+            <div class="commentBox">
 
+                <p class="taskDescription">Comment on the site.</p>
+            </div>
+            <div class="actionBox">
+                <ul class="commentList">
+                    <li>
+                        <div class="commenterImage">
+                            <img src="http://lorempixel.com/50/50/people/6" />
+                        </div>
+                        <div class="commentText">
+                            <p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
 
+                        </div>
+                    </li>
+                    <li>
+                        <div class="commenterImage">
+                            <img src="http://lorempixel.com/50/50/people/7" />
+                        </div>
+                        <div class="commentText">
+                            <p class="">Hello this is a test comment and this comment is particularly very long and it goes on and on and on.</p> <span class="date sub-text">on March 5th, 2014</span>
 
-        <div class="row marketing">
-            <div class="col-md-12">
-                <!-- <div id="tweet_logs"></div> -->
-                <table class="table table-striped" id="mainTbl" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>tags</th>
-                            <th>count</th>
-                            <!--
-                            <th>screen name</th>
-                            <th>friend</th>
-                            <th>User Location</th>
-                            <th>Timestamp</th>
--->
-                        </tr>
-                    </thead>
-                    <tbody id="tblBody">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="commenterImage">
 
-                    </tbody>
-                </table>
+                            <!--                            <img src="http://lorempixel.com/50/50/people/9" />-->
+                        </div>
+                        <div class="commentText">
+                            <p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
+
+                        </div>
+                    </li>
+                </ul>
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="Your comments" />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default">Add</button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div class="row">
-            <div id="chartSec" class="col-md-6">
 
-            </div>
 
-        </div>
+
     </div>
 
 
@@ -124,8 +146,7 @@
     <!-- endbuild -->
 
     <!-- build:js({app,.tmp}) scripts/main.js -->
-    <script src="../scripts/socket.io.js"></script>
-    <script src="../scripts/main.js"></script>
+    <script src="../scripts/comment.js"></script>
     <!-- endbuild -->
 </body>
 
