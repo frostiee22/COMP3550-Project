@@ -178,16 +178,16 @@ app.get('/api/hashtags/top15tags', function (req, res) {
     });
 });
 
-setInterval(function RemoveLeastUsed() {
-    connection.query('DELETE FROM `hashtags` WHERE `times`  < 10000', function (err, rows) {
-        if (err) {
-            return err;
-        } else {
-            console.log("removed unused rows");
-        }
-
-    });
-}, 120000);
+//setInterval(function RemoveLeastUsed() {
+//    connection.query('DELETE FROM `hashtags` WHERE `times`  < 10000', function (err, rows) {
+//        if (err) {
+//            return err;
+//        } else {
+//            console.log("removed unused rows");
+//        }
+//
+//    });
+//}, 120000);
 
 //function RemoveLeastUsed(num) {
 //    connection.query('DELETE FROM `hashtags` WHERE `times`  < "' + num + "';", function (err, rows) {
