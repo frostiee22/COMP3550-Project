@@ -83,7 +83,7 @@ io.on('connection', function (socket) {
     stream.on('tweet', function (tweet) {
         //When Stream is received from twitter
         io.emit('new tweet', tweet); //Send to client via a push
-        // CountHashTags(tweet);
+        //CountHashTags(tweet);
 
     });
 
@@ -232,7 +232,7 @@ app.post('/register', function (req, res) {
         }
     } else {
         console.log("passwords do not match up");
-        res.redirect('/createAcc.html');
+        res.redirect('/register.html');
     }
 });
 
@@ -242,12 +242,8 @@ app.post('/login', function (req, res) {
     user.username = req.body.loginName;
     user.password = req.body.loginPassword;
 
-    if (CheckLogin(user.username, user.password)) {
-        res.redirect("/index.html");
-        console.log("user " + user.username + " logged in");
-    } else {
-        res.redirect("/login.html");
-    }
+    CheckLogin(user.username, user.password, res);
+
 
 });
 
@@ -289,7 +285,7 @@ function checkIfUserExist(name) {
 }
 
 
-function CheckLogin(username, password) {
+function CheckLogin(username, password, res) {
     var salt = "12AxBy98";
     password = crypto.createHash('sha1').update(password + salt).digest('hex');
 
@@ -297,18 +293,25 @@ function CheckLogin(username, password) {
     connection.query(sql, function (err, user) {
         if (err) {
             console.log("Error occured " + err);
+            return;
         } else {
             if (user[0] != null) {
-                if ((user[0].username == username) && (user[0].password == password)) {
-                    console.log("user found");
-                    return true;
-                } else {
-                    console.log("user NOT found");
-                    return false;
-                }
+                console.log("user found");
+                res.redirect('/home/index.html');
+
+                var loginstatus = "UPDATE `users` set `loginstatus` = 1 where `username` = '" + username + "' and `password` = '" + password + "';";
+                connection.query(loginstatus, function (err, updata) {
+                    if (err) {
+                        console.log("Error occured " + err);
+                    } else {
+                        // was updated
+                    }
+                });
+            } else {
+                console.log("user NOT found");
+                res.redirect('/login.html');
+                return 0;
             }
-            console.log("user NOT found");
-            return false;
         }
     });
 

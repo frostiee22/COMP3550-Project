@@ -1,9 +1,9 @@
-$(document).ready(function() {
-    $("#register").click(function() {
+$(document).ready(function () {
+    $("#register").click(function () {
         var name = $("#loginName").val();
         var password = $("#loginPassword1").val();
         var cpassword = $("#loginPassword2").val();
-        if (name == '' || email == '' || password == '' || cpassword == '') {
+        if (name == '' || password == '' || cpassword == '') {
             alert("Please fill all fields...!!!!!!");
         } else if ((password.length) < 8) {
             alert("Password should atleast 8 character in length...!!!!!!");
