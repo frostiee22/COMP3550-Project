@@ -26,78 +26,36 @@
 
 <body>
     <!--[if lt IE 10]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
 
     <div class="container">
 
+        <div class="container">
 
-        <div class="header">
-            <ul class="nav nav-pills pull-right">
-                <li class="active"><a href="index.html">Home</a>
-                </li>
-                <li><a href="#">TweetMap</a>
-                </li>
-                <li><a href="#">Stats</a>
-                </li>
-                <li><a href="#">Coments</a>
-                </li>
-            </ul>
-            <h3 class="text-muted">Twitter Tags</h3>
-        </div>
-
-        <div class="jumbotron">
-            <h1>#Tags</h1>
-            <p class="lead">Showing the amount of times a #tag was used</p>
-            <div class="btn-group">
-                <button id="btnAll" type="button" class="btn btn-default">All</button>
-                <button id="btnTop15" type="button" class="btn btn-default">Top 15</button>
-                <!--
-          <button id="btnGen" type="button" class="btn btn-default">Gender</button>
-          <button id="btnUnam" type="button" class="btn btn-default">Username</button>
--->
+            <div class="row">
+                <form method="POST" action="/login" class="form-signin" role="form">
+                    <h2 class="form-signin-heading">Please sign in</h2>
+                    <label for="inputEmail" class="sr-only">Username</label>
+                    <input type="text" name="loginName" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" name="loginPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="remember-me">Remember me
+                        </label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" id="submitlogin" type="submit">Sign in</button>
+                </form>
             </div>
+
+
+
         </div>
+        <!-- /container -->
 
 
-
-
-        <div class="row marketing">
-            <div class="col-md-12">
-                <!-- <div id="tweet_logs"></div> -->
-                <table class="table table-striped" id="mainTbl" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>tags</th>
-                            <th>count</th>
-                            <!--
-                            <th>screen name</th>
-                            <th>friend</th>
-                            <th>User Location</th>
-                            <th>Timestamp</th>
--->
-                        </tr>
-                    </thead>
-                    <tbody id="tblBody">
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="row">
-            <div id="chartSec" class="col-md-6">
-
-            </div>
-            <div id="controlSec" class="col-md-6">
-                <div class="btn-group">
-                    <button id="btnAlltags" type="button" class="btn btn-default">tags</button>
-                    <button id="btnTop15Tags" type="button" class="btn btn-default">Top15</button>
-                    <!--                    <button id="btnChartState" type="button" class="btn btn-default">By State</button>-->
-                </div>
-            </div>
-        </div>
     </div>
 
 
@@ -130,9 +88,17 @@
     <!-- endbuild -->
 
     <!-- build:js({app,.tmp}) scripts/main.js -->
-    <script src="scripts/socket.io.js"></script>
-    <script src="scripts/main.js"></script>
     <!-- endbuild -->
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
