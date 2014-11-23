@@ -1,11 +1,10 @@
 (function (window) {
     "use strict";
     $(document).ready(function () {
-
-
         defineTableButtons();
 
     });
+
 
 
     function defineTableButtons() {
@@ -20,9 +19,6 @@
 
         });
     }
-
-
-
 
 
 

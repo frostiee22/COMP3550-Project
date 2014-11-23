@@ -26,8 +26,8 @@
 
 <body>
     <!--[if lt IE 10]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
 
     <div class="container">
@@ -35,11 +35,11 @@
 
         <div class="header">
             <ul class="nav nav-pills pull-right">
-                <li class="active"><a href="index.html">Home</a>
+                <li><a href="index.html">Home</a>
                 </li>
                 <li><a href="#">TweetMap</a>
                 </li>
-                <li><a href="stats.html">Stats</a>
+                <li class="active"><a href="stats.html">Stats</a>
                 </li>
                 <li><a href="comment.html">Coments</a>
                 </li>
@@ -49,48 +49,20 @@
 
         <div class="jumbotron">
             <h1>#Tags</h1>
-            <p class="lead">Showing the amount of times a #tag was used</p>
+            <p class="lead">Showing Statistics of tweets</p>
             <div class="btn-group">
-                <button id="btnAll" type="button" class="btn btn-default">All</button>
-                <button id="btnTop15" type="button" class="btn btn-default">Top 15</button>
-                <!--
-          <button id="btnGen" type="button" class="btn btn-default">Gender</button>
-          <button id="btnUnam" type="button" class="btn btn-default">Username</button>
--->
+                <button id="btnChartLocation" type="button" class="btn btn-default">Tweeets in a location</button>
+                <button id="btnChartTop15Locations" typpe="button" class="btn btn-default" >Top15 locations</button>
+                <button id="btnChartTop15Tags" type="button" class="btn btn-default">Top15 #tags</button>
+
             </div>
         </div>
 
-
-
-
-        <div class="row marketing">
-            <div class="col-md-12">
-                <!-- <div id="tweet_logs"></div> -->
-                <table class="table table-striped" id="mainTbl" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>tags</th>
-                            <th>count</th>
-                            <!--
-                            <th>screen name</th>
-                            <th>friend</th>
-                            <th>User Location</th>
-                            <th>Timestamp</th>
--->
-                        </tr>
-                    </thead>
-                    <tbody id="tblBody">
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
         <div class="row">
-            <div id="chartSec" class="col-md-6">
+            <div id="chartSec" class="col-md-12">
 
             </div>
-
         </div>
     </div>
 
@@ -125,7 +97,7 @@
 
     <!-- build:js({app,.tmp}) scripts/main.js -->
     <script src="../scripts/socket.io.js"></script>
-    <script src="../scripts/main.js"></script>
+    <script src="../scripts/stats.js"></script>
     <!-- endbuild -->
 </body>
 
