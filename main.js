@@ -38,22 +38,22 @@ app.use(session({
 
 
 //local database
-connection = mysql.createConnection({
-    host: "localhost",
-    user: "comp3550project",
-    password: "password",
-    database: "comp3550project"
-});
+//connection = mysql.createConnection({
+//    host: "localhost",
+//    user: "comp3550project",
+//    password: "password",
+//    database: "comp3550project"
+//});
 
 
 
 // online database
-//connection = mysql.createConnection({
-//    host: "www.db4free.net",
-//    user: "comp3550project",
-//    password: "password123",
-//    database: "comp3550project"
-//});
+connection = mysql.createConnection({
+    host: "www.db4free.net",
+    user: "comp3550project",
+    password: "password123",
+    database: "comp3550project"
+});
 
 connection.connect(function (err) {
     if (err) {
@@ -75,6 +75,8 @@ var stream = twitter.stream('statuses/sample', {
 
 var streamOnCheck = false;
 
+
+
 io.on('connection', function (socket) {
     console.log('User connected ... Starting Stream connection');
 
@@ -82,26 +84,34 @@ io.on('connection', function (socket) {
         stream.start();
         streamOnCheck = true;
     } else {
-        // do nothing
+
+
     }
 
 
     //In order to minimise API usage, we only start stream from twitter when user connected
     stream.on('tweet', function (tweet) {
+
         //When Stream is received from twitter
         io.emit('new tweet', tweet); //Send to client via a push
 
         //setTimeout(CountHashTags(tweet), 8000);
-        CountHashTags(tweet);
-        CountTweetsInLocation(tweet);
-
+        if (streamOnCheck === true) {
+            CountHashTags(tweet);
+            CountTweetsInLocation(tweet);
+        }
 
     });
 
 
+    stream.on('error', function (res) {
+        console.log("error occured");
+    })
+
 
     socket.on('disconnect', function () {
-        console.log("User disconnected");
+        console.log("User disconnected  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        stream.stop();
         if (streamOnCheck === true) {
             stream.stop();
             streamOnCheck = false;
@@ -121,7 +131,9 @@ io.on('connection', function (socket) {
 
 function CountHashTags(tweet) {
 
+
     var el = tweet.entities;
+
 
     if (tweet.entities != null) {
         if (tweet.entities.hashtags != null) {
@@ -153,7 +165,6 @@ function CountHashTags(tweet) {
 
 function CountTweetsInLocation(tweet) {
     //console.log("outside " + tweet.location);
-
     var value,
         //loc = tweet.user.location;
         loc = (tweet.user.location).trim();
@@ -161,7 +172,7 @@ function CountTweetsInLocation(tweet) {
     value = loc.charCodeAt(0);
     //  loc != null || loc != '' || loc != ' '
 
-    if ( (value > 54 && value < 91) || (value > 96 && value < 123) ) {
+    if ((value > 54 && value < 91) || (value > 96 && value < 123)) {
 
         var sql = "INSERT INTO `locations` (`location`) VALUES ('" + loc + "');";
 
@@ -184,7 +195,7 @@ function CountTweetsInLocation(tweet) {
 }
 // getting all the tweets for a particular location
 app.get('/api/location/tweets', function (req, res) {
-    connection.query('SELECT * FROM `locations`', function (err, rows) {
+    connection.query('SELECT * FROM `locations` limit 0, 50', function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -223,9 +234,9 @@ app.get('/api/hashtags/top15tags', function (req, res) {
 });
 
 
-app.get('/api/location/top15locations', function(req, res){
-    connection.query('SELECT * FROM `locations` ORDER BY `tweets` DESC limit 0, 15 ', function(err, rows){
-         if (err) {
+app.get('/api/location/top15locations', function (req, res) {
+    connection.query('SELECT * FROM `locations` ORDER BY `tweets` DESC limit 0, 15 ', function (err, rows) {
+        if (err) {
             return err;
         } else {
             res.json(rows);
@@ -233,23 +244,23 @@ app.get('/api/location/top15locations', function(req, res){
     });
 });
 
-setInterval(function RemoveLeastUsed() {
-    connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
-        if (err) {
-            return err;
-        } else {
-            console.log("removed unused  hashtags");
-        }
-
-    });
-    connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
-        if (err) {
-            return err;
-        } else {
-            console.log("removed locations");
-        }
-    });
-}, 25000);
+//setInterval(function RemoveLeastUsed() {
+//    connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
+//        if (err) {
+//            return err;
+//        } else {
+//            console.log("removed unused  hashtags");
+//        }
+//
+//    });
+//    connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
+//        if (err) {
+//            return err;
+//        } else {
+//            console.log("removed locations");
+//        }
+//    });
+//}, 30000);
 
 //function RemoveLeastUsed(num) {
 //    connection.query('DELETE FROM `hashtags`WHERE `times` < "' + num + "';", function (err, rows) {
@@ -368,7 +379,6 @@ function CheckLogin(username, password, req, res) {
             if (user[0] != null) {
                 console.log("user found");
                 req.session.user_id = user[0].id;
-                console.log(user[0].id);
                 req.session.save(function (err) {
                     if (!err) {
                         console.log("session saved");
@@ -405,6 +415,7 @@ function logout(username, res) {
     })
 
 }
+
 
 
 

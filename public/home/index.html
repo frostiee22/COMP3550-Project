@@ -21,18 +21,17 @@
     <!-- build:js scripts/vendor/modernizr.js -->
     <script src="../bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
-
 </head>
 
 <body>
     <!--[if lt IE 10]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-
-
+		<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
     <div class="container">
-
-
+        <ul class="nav nav-pills pull-right">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+        <hr />
         <div class="header">
             <ul class="nav nav-pills pull-right">
                 <li class="active"><a href="index.html">Home</a>
@@ -46,7 +45,6 @@
             </ul>
             <h3 class="text-muted">Twitter Tags</h3>
         </div>
-
         <div class="jumbotron">
             <h1>#Tags</h1>
             <p class="lead">Showing the amount of times a #tag was used</p>
@@ -54,15 +52,12 @@
                 <button id="btnAll" type="button" class="btn btn-default">All</button>
                 <button id="btnTop15" type="button" class="btn btn-default">Top 15</button>
                 <!--
-          <button id="btnGen" type="button" class="btn btn-default">Gender</button>
-          <button id="btnUnam" type="button" class="btn btn-default">Username</button>
--->
+	<button id="btnGen" type="button" class="btn btn-default">Gender</button>
+	<button id="btnUnam" type="button" class="btn btn-default">Username</button>
+	-->
+
             </div>
         </div>
-
-
-
-
         <div class="row marketing">
             <div class="col-md-12">
                 <!-- <div id="tweet_logs"></div> -->
@@ -72,37 +67,28 @@
                             <th>tags</th>
                             <th>count</th>
                             <!--
-                            <th>screen name</th>
-                            <th>friend</th>
-                            <th>User Location</th>
-                            <th>Timestamp</th>
--->
+				<th>screen name</th>
+				<th>friend</th>
+				<th>User Location</th>
+				<th>Timestamp</th>
+				-->
                         </tr>
                     </thead>
                     <tbody id="tblBody">
-
                     </tbody>
                 </table>
             </div>
         </div>
-
         <div class="row">
             <div id="chartSec" class="col-md-6">
-
             </div>
-
         </div>
     </div>
-
-
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="../bower_components/jquery/dist/jquery.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-
-
-
     <!-- build:js(.) scripts/plugins.js -->
     <script src="../bower_components/bootstrap/js/affix.js"></script>
     <script src="../bower_components/bootstrap/js/alert.js"></script>
@@ -122,7 +108,6 @@
     <script src="../bower_components/highcharts/highcharts-more.js"></script>
     <script src="../bower_components/highcharts/modules/exporting.js"></script>
     <!-- endbuild -->
-
     <!-- build:js({app,.tmp}) scripts/main.js -->
     <script src="../scripts/socket.io.js"></script>
     <script src="../scripts/main.js"></script>
