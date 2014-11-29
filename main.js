@@ -38,21 +38,21 @@ app.use(session({
 
 
 //local database
-//connection = mysql.createConnection({
-//    host: "localhost",
-//    user: "comp3550project",
-//    password: "password",
-//    database: "comp3550project"
-//});
+// connection = mysql.createConnection({
+//     host: "localhost",
+//     user: "comp3550project",
+//     password: "password",
+//     database: "comp3550project"
+// });
 
 
 
 // online database
 connection = mysql.createConnection({
-    host: "www.db4free.net",
-    user: "comp3550project",
-    password: "password123",
-    database: "comp3550project"
+   host: "www.db4free.net",
+   user: "comp3550project",
+   password: "password123",
+   database: "comp3550project"
 });
 
 connection.connect(function (err) {
@@ -97,15 +97,19 @@ io.on('connection', function (socket) {
 
         //setTimeout(CountHashTags(tweet), 8000);
         if (streamOnCheck === true) {
-            CountHashTags(tweet);
+
+            setTimeout(function(){
+                 CountHashTags(tweet);
             CountTweetsInLocation(tweet);
+            },5000);
+
         }
 
     });
 
 
     stream.on('error', function (res) {
-        console.log("error occured");
+        //console.log("error occured");
     })
 
 
@@ -195,7 +199,7 @@ function CountTweetsInLocation(tweet) {
 }
 // getting all the tweets for a particular location
 app.get('/api/location/tweets', function (req, res) {
-    connection.query('SELECT * FROM `locations` limit 0, 50', function (err, rows) {
+    connection.query('SELECT * FROM `locations` limit 0, 150', function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -244,23 +248,28 @@ app.get('/api/location/top15locations', function (req, res) {
     });
 });
 
-//setInterval(function RemoveLeastUsed() {
-//    connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
-//        if (err) {
-//            return err;
-//        } else {
-//            console.log("removed unused  hashtags");
-//        }
-//
-//    });
-//    connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
-//        if (err) {
-//            return err;
-//        } else {
-//            console.log("removed locations");
-//        }
-//    });
-//}, 30000);
+setInterval(function() {
+    connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
+        if (err) {
+            return err;
+        } else {
+            console.log("removed unused  hashtags");
+        }
+
+    });
+}, 11000);
+
+setInterval(function (){
+    connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
+        if (err) {
+            return err;
+        } else {
+            console.log("removed locations");
+        }
+    });
+}, 19000);
+
+
 
 //function RemoveLeastUsed(num) {
 //    connection.query('DELETE FROM `hashtags`WHERE `times` < "' + num + "';", function (err, rows) {
@@ -386,14 +395,14 @@ function CheckLogin(username, password, req, res) {
                 })
                 res.redirect('/home');
 
-                var loginstatus = "UPDATE `users` set `loginstatus` = 1 where `username` = '" + username + "' and `password` = '" + password + "';";
-                connection.query(loginstatus, function (err, update) {
-                    if (err) {
-                        console.log("Error occured " + err);
-                    } else {
-                        // was updated
-                    }
-                });
+//                var loginstatus = "UPDATE `users` set `loginstatus` = 1 where `username` = '" + username + "' and `password` = '" + password + "';";
+//                connection.query(loginstatus, function (err, update) {
+//                    if (err) {
+//                        console.log("Error occured " + err);
+//                    } else {
+//                        // was updated
+//                    }
+//                });
             } else {
                 console.log("user NOT found");
                 res.redirect('/login.html');

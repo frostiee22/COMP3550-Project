@@ -2,10 +2,10 @@
     $(document).ready(function () {
         defineChartButtons();
 
-        loadLocationTweets(function (data) {
-            var recs = data.map(transformRec)
-            drawColumnChartByLocation(recs);
-        });
+//        loadLocationTweets(function (data) {
+//            var recs = data.map(transformRec)
+//            drawColumnChartByLocation(recs);
+//        });
 
 
     });

@@ -6,7 +6,8 @@
     "socket.io": "^1.2.0",
     "twit": "^1.1.18",
     "mysql": "^2.5.2",
-    "twitter": "*"
+    "body-parser": "^1.9.0",
+    "express-session": "^1.9.0"
   },
   "main": "main.js"
 }
