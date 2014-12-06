@@ -14,9 +14,9 @@ var express = require('express'),
     port = 3000;
 
 
-
-http.listen(port, function () {
-    console.log("Listening on http://127.0.0.1:" + port);
+app.set('port', (process.env.PORT || port))
+http.listen(app.get('port'), function () {
+    console.log("Listening on http://127.0.0.1:" + app.get('port'));
 });
 
 app.use(express.static(__dirname + '/public'));
@@ -95,13 +95,15 @@ io.on('connection', function (socket) {
         //When Stream is received from twitter
         io.emit('new tweet', tweet); //Send to client via a push
 
-        //setTimeout(CountHashTags(tweet), 8000);
         if (streamOnCheck === true) {
 
-            setTimeout(function(){
-                 CountHashTags(tweet);
+            CountHashTags(tweet);
             CountTweetsInLocation(tweet);
-            },5000);
+            
+            // setTimeout(function(){
+            //      CountHashTags(tweet);
+            // CountTweetsInLocation(tweet);
+            // },50);
 
         }
 
@@ -248,26 +250,26 @@ app.get('/api/location/top15locations', function (req, res) {
     });
 });
 
-setInterval(function() {
-    connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
-        if (err) {
-            return err;
-        } else {
-            console.log("removed unused  hashtags");
-        }
+// setInterval(function() {
+//     connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
+//         if (err) {
+//             return err;
+//         } else {
+//             console.log("removed unused  hashtags");
+//         }
 
-    });
-}, 11000);
+//     });
+// }, 11000);
 
-setInterval(function (){
-    connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
-        if (err) {
-            return err;
-        } else {
-            console.log("removed locations");
-        }
-    });
-}, 19000);
+// setInterval(function (){
+//     connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
+//         if (err) {
+//             return err;
+//         } else {
+//             console.log("removed locations");
+//         }
+//     });
+// }, 19000);
 
 
 
@@ -291,7 +293,6 @@ function checkAuth(req, res, next) {
         res.send(401, "You are not authorized to view this page");
         res.redirect("/");
     } else {
-        console.log("didnt work");
         next();
     }
 }
