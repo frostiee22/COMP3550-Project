@@ -97,13 +97,11 @@ io.on('connection', function (socket) {
 
         if (streamOnCheck === true) {
 
-            CountHashTags(tweet);
-            CountTweetsInLocation(tweet);
-            
-            // setTimeout(function(){
-            //      CountHashTags(tweet);
-            // CountTweetsInLocation(tweet);
-            // },50);
+            setTimeout(function(){
+                CountHashTags(tweet);
+                CountTweetsInLocation(tweet);
+                streamOnCheck = false;
+            },25);
 
         }
 
@@ -117,7 +115,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log("User disconnected  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        stream.stop();
+        //stream.stop();
         if (streamOnCheck === true) {
             stream.stop();
             streamOnCheck = false;
