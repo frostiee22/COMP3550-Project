@@ -11,18 +11,20 @@ var express = require('express'),
     crypto = require('crypto'),
     connection,
     salt = "12AxBy98",
+    onlineUsers = [],
     port = 3000;
 
 
-app.set('port', (process.env.PORT || port))
-http.listen(app.get('port'), function () {
-    console.log("Listening on http://127.0.0.1:" + app.get('port'));
+http.listen(port, function () {
+    console.log("Listening on http://127.0.0.1:" + port);
 });
 
 app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+app.use(bodyParser.json());
 app.use(session({
     secret: "sadf3234",
     cookie: {
@@ -67,7 +69,6 @@ connection.connect(function (err) {
 
 
 
-
 // https://github.com/ttezel/twit
 var stream = twitter.stream('statuses/sample', {
     language: 'en'
@@ -95,19 +96,13 @@ io.on('connection', function (socket) {
         //When Stream is received from twitter
         io.emit('new tweet', tweet); //Send to client via a push
 
+        //setTimeout(CountHashTags(tweet), 8000);
         if (streamOnCheck === true) {
 
             setTimeout(function () {
                 CountHashTags(tweet);
                 CountTweetsInLocation(tweet);
-                streamOnCheck = false;
-            }, 25);
-
-            //             setInterval(function(){
-            //                CountHashTags(tweet);
-            //                CountTweetsInLocation(tweet);
-            //                 console.log(tweet.user.name);
-            //	           },2000);
+            }, 5000);
 
         }
 
@@ -120,8 +115,8 @@ io.on('connection', function (socket) {
 
 
     socket.on('disconnect', function () {
-        console.log("User disconnected  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        //stream.stop();
+        console.log("User disconnected");
+        stream.stop();
         if (streamOnCheck === true) {
             stream.stop();
             streamOnCheck = false;
@@ -254,73 +249,27 @@ app.get('/api/location/top15locations', function (req, res) {
     });
 });
 
-app.get('/api/comments', function (req, res) {
-    connection.query('SELECT * FROM `comments`', function (err, rows) {
+setInterval(function () {
+    connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
         if (err) {
             return err;
         } else {
-            res.json(rows);
+            console.log("removed unused  hashtags");
         }
-    })
-});
 
-app.post('/comments', function (req, res) {
-    var comment = {};
-    comment.name = req.body.comment_name;
-    comment.comments = req.body.comment_comment;
-
-
-    if (comment.comments != []) {
-        var sql = "INSERT INTO `comments` (`name`, `comment`) VALUES ('" + comment.name + "','" + comment.comments + "');";
-        connection.query(sql, function (err, row) {
-            if (err) {
-                return err;
-            } else {
-                console.log("comment added!");
-            }
-        });
-    }
-    else{
-        console.log("null comment");
-    }
-
-
-
-});
-
-// setInterval(function() {
-//     connection.query('DELETE FROM `hashtags`WHERE `times` < 10000', function (err, rows) {
-//         if (err) {
-//             return err;
-//         } else {
-//             console.log("removed unused  hashtags");
-//         }
-
-//     });
-// }, 11000);
-
-// setInterval(function (){
-//     connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
-//         if (err) {
-//             return err;
-//         } else {
-//             console.log("removed locations");
-//         }
-//     });
-// }, 19000);
+    });
+}, 11000);
 
 setInterval(function () {
-    connection.query('DELETE FROM `comments` WHERE `comment` IS NOT NULL', function (err, rows) {
+    connection.query('DELETE FROM `locations`WHERE `tweets` < 10000', function (err, rows) {
         if (err) {
             return err;
         } else {
-            console.log("removed comments");
+            console.log("removed locations");
         }
     });
-}, 14400000);
+}, 19000);
 
-
-//14400000
 
 
 //function RemoveLeastUsed(num) {
@@ -343,11 +292,12 @@ function checkAuth(req, res, next) {
         res.send(401, "You are not authorized to view this page");
         res.redirect("/");
     } else {
+        console.log("didnt work");
         next();
     }
 }
 
-app.get('/home/', checkAuth, function (req, res) {
+app.get('/home', checkAuth, function (req, res) {
     res.send("priviledge page");
     console.log("blocked page");
 });
@@ -363,7 +313,8 @@ app.post('/register', function (req, res) {
             console.log("user " + newuser.username + " exist");
             res.send("user " + newuser.username + " exist");
         } else {
-            addUser(newuser.username, newuser.password1, salt, 0, res);
+            addUser(newuser.username, newuser.password1, salt, 0);
+            res.redirect('/login.html');
         }
     } else {
         console.log("passwords do not match up");
@@ -374,6 +325,7 @@ app.post('/register', function (req, res) {
 
 app.get('/logout', function (req, res) {
     delete req.session.user_id;
+    console.log(onlineUsers);
     res.redirect('/');
 })
 
@@ -389,7 +341,7 @@ app.post('/login', function (req, res) {
 
 
 
-function addUser(username, password, salt, type, res) {
+function addUser(username, password, salt, type) {
 
     password = crypto.createHash('sha1').update(password + salt).digest('hex');
 
@@ -397,11 +349,9 @@ function addUser(username, password, salt, type, res) {
 
     connection.query(sql, function (err, result) {
         if (err) {
-            console.log("ADD USER - Error occured " + err);
-            res.redirect('register.html');
+            console.log("Error occured " + err);
         } else {
             console.log("Inserted user with ID : " + result.insertId);
-            res.redirect('login.html');
         }
     });
 }
@@ -410,10 +360,12 @@ function checkIfUserExist(name) {
     var sql = "SELECT `username` FROM `users` WHERE `username` =  '" + name + "';";
     connection.query(sql, function (err, result) {
         if (err) {
-            console.log("checkIfUserExist - Error occured " + err);
+            console.log("Error occured " + err);
         } else {
-            if (result[0] != null) {
-                if (result[0].username == name) {
+            var rows = JSON.stringify(result);
+            if (rows != null) {
+                console.log(rows);
+                if (rows[0].username == name) {
                     return true;
                 } else {
                     return false;
@@ -432,17 +384,22 @@ function CheckLogin(username, password, req, res) {
     var sql = "SELECT `id`, `username`,`password` FROM `users` WHERE `username` =  '" + username + "'and `password` = '" + password + "';";
     connection.query(sql, function (err, user) {
         if (err) {
-            console.log("CheckLogin - Error occured " + err);
+            console.log("Error occured " + err);
             return;
         } else {
             if (user[0] != null) {
                 console.log("user found");
-                req.session.user_id = user[0].id;
+                req.session.user_id = 1;
+                //req.session.user_id = user[0].id;
                 req.session.save(function (err) {
                     if (!err) {
                         console.log("session saved");
                     }
-                })
+                });
+                var u = {};
+                u.id = user[0].id;
+                u.username = user[0].username;
+                onlineUsers.push(u);
                 res.redirect('/home');
 
                 //                var loginstatus = "UPDATE `users` set `loginstatus` = 1 where `username` = '" + username + "' and `password` = '" + password + "';";
@@ -467,16 +424,16 @@ function logout(username, res) {
     var loginstatus = "UPDATE `users` set `loginstatus` = 0 where `username` = '" + username + "';";
     connection.query(loginstatus, function (err, updata) {
         if (err) {
-            console.log("Logout - Error occured " + err);
+            console.log("Error occured " + err);
         } else {
+            //            forEach(onlineUsers,function(el){
+            //                console.log(el);
+            //            });
             res.redirect("/");
         }
     })
 
 }
-
-
-
 
 
 
