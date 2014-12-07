@@ -2,9 +2,8 @@ var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     session = require('express-session'),
-    http = require('http'),
-    server = http.createServer(app),
-    io = require('socket.io').listen(server),
+    http = require('http').Server(app),
+    io = require('socket.io')(http),
     Twitter = require('twit'),
     config = require('./config.json'),
     twitter = new Twitter(config),
@@ -28,7 +27,7 @@ var twit = new twitter2({
 
 
 app.set('port', (process.env.PORT || port))
-server.listen(app.get('port'), function () {
+http.listen(app.get('port'), function () {
     console.log("Listening on http://127.0.0.1:" + app.get('port'));
 });
 
@@ -136,6 +135,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log("User disconnected  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        stream.stop();
         if (streamOnCheck === true) {
             //stream.stop();
             streamOnCheck = false;
@@ -147,14 +147,14 @@ io.on('connection', function (socket) {
 
 
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Used to supply the map with location data
 
     socket.on("start tweets", function () {
-        //stream2.stop();
-       // if (stream2 === null) {
+            //stream.stop();
+        if (stream2 === null) {
             //Connect to twitter stream passing in filter for entire world.
             twit.stream('statuses/filter', {
                 'locations': '-180,-90,180,90'
@@ -173,46 +173,45 @@ io.on('connection', function (socket) {
 
                             //Send out to web sockets channel.
                             socket.emit('twitter-stream', outputPoint);
+                        } else if (data.place) {
+                            if (data.place.bounding_box === 'Polygon') {
+                                // Calculate the center of the bounding box for the tweet
+                                var coord, _i, _len;
+                                var centerLat = 0;
+                                var centerLng = 0;
+
+                                for (_i = 0, _len = coords.length; _i < _len; _i++) {
+                                    coord = coords[_i];
+                                    centerLat += coord[0];
+                                    centerLng += coord[1];
+                                }
+                                centerLat = centerLat / coords.length;
+                                centerLng = centerLng / coords.length;
+
+                                // Build json object and broadcast it
+                                var outputPoint = {
+                                    "lat": centerLat,
+                                    "lng": centerLng
+                                };
+                                socket.broadcast.emit("twitter-stream", outputPoint);
+
+                            }
                         }
-//                        else if (data.place) {
-//                            if (data.place.bounding_box === 'Polygon') {
-//                                // Calculate the center of the bounding box for the tweet
-//                                var coord, _i, _len;
-//                                var centerLat = 0;
-//                                var centerLng = 0;
-//
-//                                for (_i = 0, _len = coords.length; _i < _len; _i++) {
-//                                    coord = coords[_i];
-//                                    centerLat += coord[0];
-//                                    centerLng += coord[1];
-//                                }
-//                                centerLat = centerLat / coords.length;
-//                                centerLng = centerLng / coords.length;
-//
-//                                // Build json object and broadcast it
-//                                var outputPoint = {
-//                                    "lat": centerLat,
-//                                    "lng": centerLng
-//                                };
-//                                socket.broadcast.emit("twitter-stream", outputPoint);
-//
-//                            }
-//                        }
                     }
-                                         stream.on('limit', function(limitMessage) {
-                                          return console.log(limitMessage);
-                                         });
+                                        stream.on('limit', function(limitMessage) {
+                                         return console.log(limitMessage);
+                                        });
 
-                                         stream.on('warning', function(warning) {
-                                           return console.log(warning);
-                                         });
+                                        stream.on('warning', function(warning) {
+                                          return console.log(warning);
+                                        });
 
-                                         stream.on('disconnect', function(disconnectMessage) {
-                                           return console.log(disconnectMessage);
-                                         });
+                                        stream.on('disconnect', function(disconnectMessage) {
+                                          return console.log(disconnectMessage);
+                                        });
                 });
             });
-       // }
+        }
     });
 
 
@@ -348,7 +347,7 @@ app.get('/api/location/top15locations', function (req, res) {
 });
 
 app.get('/api/comments', function (req, res) {
-    connection.query('SELECT * FROM `comments`', function (err, rows) {
+    connection.query("SELECT `name`, `comment` , to_char(`timestamp`,'DD-MON-YYYY') FROM `comments`", function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -372,7 +371,8 @@ app.post('/comments', function (req, res) {
                 console.log("comment added!");
             }
         });
-    } else {
+    }
+    else{
         console.log("null comment");
     }
 
