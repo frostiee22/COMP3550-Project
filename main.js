@@ -387,25 +387,25 @@ app.post('/comments', function (req, res) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-setInterval(function() {
-    connection.query('DELETE FROM `hashtags`WHERE `times` < 5', function (err, rows) {
-        if (err) {
-            return err;
-        } else {
-            console.log("removed unused  hashtags");
-        }
-    });
-}, 11000);
+// setInterval(function() {
+//     connection.query('DELETE FROM `hashtags`WHERE `times` < 5', function (err, rows) {
+//         if (err) {
+//             return err;
+//         } else {
+//             console.log("removed unused  hashtags");
+//         }
+//     });
+// }, 11000);
 
-setInterval(function (){
-    connection.query('DELETE FROM `locations`WHERE `tweets` < 5', function (err, rows) {
-        if (err) {
-            return err;
-        } else {
-            console.log("removed locations");
-        }
-    });
-}, 23000);
+// setInterval(function (){
+//     connection.query('DELETE FROM `locations`WHERE `tweets` < 5', function (err, rows) {
+//         if (err) {
+//             return err;
+//         } else {
+//             console.log("removed locations");
+//         }
+//     });
+// }, 23000);
 
 setInterval(function () {
     connection.query('DELETE FROM `comments` WHERE `comment` IS NOT NULL', function (err, rows) {
