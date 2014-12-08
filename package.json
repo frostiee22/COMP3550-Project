@@ -2,12 +2,13 @@
   "name": "nodexpr",
   "version": "0.0.0",
   "dependencies": {
-    "express": "^4.10.2",
-    "socket.io": "^1.2.0",
-    "twit": "^1.1.18",
-    "mysql": "^2.5.2",
-    "body-parser": "^1.9.0",
-    "express-session": "^1.9.0", "twitter": "*"
+    "express": "*",
+    "socket.io": "*",
+    "twit": "*",
+    "mysql": "*",
+    "body-parser": "*",
+    "express-session": "*",
+    "twitter": "*"
   },
   "main": "main.js"
 }

@@ -79,8 +79,6 @@ connection.connect(function (err) {
 // ******** END Database Connection **********
 
 
-
-
 // https://github.com/ttezel/twit
 var stream = twitter.stream('statuses/sample', {
     language: 'en'
@@ -99,8 +97,7 @@ io.on('connection', function (socket) {
         //stream.start();
         streamOnCheck = true;
     } else {
-
-
+        // do nothing
     }
 
 
@@ -118,12 +115,6 @@ io.on('connection', function (socket) {
                 streamOnCheck = false;
             }, 25);
 
-            //             setInterval(function(){
-            //                CountHashTags(tweet);
-            //                CountTweetsInLocation(tweet);
-            //                 console.log(tweet.user.name);
-            //	           },2000);
-
         }
 
     });
@@ -135,7 +126,7 @@ io.on('connection', function (socket) {
 
 
     socket.on('disconnect', function () {
-        console.log("User disconnected  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        console.log("++++++++++++++ User disconnected  +++++++++++++++");
         if (streamOnCheck === true) {
             //stream.stop();
             streamOnCheck = false;
@@ -174,30 +165,30 @@ io.on('connection', function (socket) {
                             //Send out to web sockets channel.
                             socket.emit('twitter-stream', outputPoint);
                         }
-//                        else if (data.place) {
-//                            if (data.place.bounding_box === 'Polygon') {
-//                                // Calculate the center of the bounding box for the tweet
-//                                var coord, _i, _len;
-//                                var centerLat = 0;
-//                                var centerLng = 0;
-//
-//                                for (_i = 0, _len = coords.length; _i < _len; _i++) {
-//                                    coord = coords[_i];
-//                                    centerLat += coord[0];
-//                                    centerLng += coord[1];
-//                                }
-//                                centerLat = centerLat / coords.length;
-//                                centerLng = centerLng / coords.length;
-//
-//                                // Build json object and broadcast it
-//                                var outputPoint = {
-//                                    "lat": centerLat,
-//                                    "lng": centerLng
-//                                };
-//                                socket.broadcast.emit("twitter-stream", outputPoint);
-//
-//                            }
-//                        }
+                        else if (data.place) {
+                            if (data.place.bounding_box === 'Polygon') {
+                                // Calculate the center of the bounding box for the tweet
+                                var coord, _i, _len;
+                                var centerLat = 0;
+                                var centerLng = 0;
+
+                                for (_i = 0, _len = coords.length; _i < _len; _i++) {
+                                    coord = coords[_i];
+                                    centerLat += coord[0];
+                                    centerLng += coord[1];
+                                }
+                                centerLat = centerLat / coords.length;
+                                centerLng = centerLng / coords.length;
+
+                                // Build json object and broadcast it
+                                var outputPoint = {
+                                    "lat": centerLat,
+                                    "lng": centerLng
+                                };
+                                socket.broadcast.emit("twitter-stream", outputPoint);
+
+                            }
+                        }
                     }
                                          stream.on('limit', function(limitMessage) {
                                           return console.log(limitMessage);
@@ -232,70 +223,72 @@ io.on('connection', function (socket) {
 // ************************* MYSQL CODES  TO SEND TO CLIENT *******************************
 
 
-function CountHashTags(tweet) {
+ function CountHashTags(tweet) {
 
 
-    var el = tweet.entities;
+     var el = tweet.entities;
 
 
-    if (tweet.entities != null) {
-        if (tweet.entities.hashtags != null) {
-            var el = tweet.entities.hashtags;
+     if (tweet.entities != null) {
+         if (tweet.entities.hashtags != null) {
+             var el = tweet.entities.hashtags;
 
-            for (var i = 0; el.length > i; i++) {
-                var tag = el[i].text;
-                var sql = "INSERT INTO `hashtags` (`tag`) VALUES ('" + tag + "');";
+             for (var i = 0; el.length > i; i++) {
+                 var tag = el[i].text;
+                 var sql = "INSERT INTO `hashtags` (`tag`) VALUES ('" + tag + "');";
 
-                connection.query(sql, function (err, result) {
-                    if (err) {
-                        var update = "UPDATE `hashtags` set `times` =  `times`+1  where `tag` = '" + tag + "';";
-                        connection.query(update, function (err, result) {
-                            if (err) {
-                                return err;
-                            }
-                            // was UPDATED
-                        });
-                        // ERROR updating
-                        return err;
-                    }
-                    //console.log("Inserted record with id" + result.insertId);
-                });
-            }
-        }
-    }
-}
+                 connection.query(sql, function (err, result) {
+                     if (err) {
+                         var update = "UPDATE `hashtags` set `times` =  `times`+1  where `tag` = '" + tag + "';";
+                         connection.query(update, function (err, result) {
+                             if (err) {
+                                 return err;
+                             }
+                             // was UPDATED
+                         });
+                         // ERROR updating
+                         return err;
+                     }
+                     //console.log("Inserted record with id" + result.insertId);
+                 });
+             }
+         }
+     }
+ }
 
 
-function CountTweetsInLocation(tweet) {
-    //console.log("outside " + tweet.location);
-    var value,
-        //loc = tweet.user.location;
-        loc = (tweet.user.location).trim();
+ function CountTweetsInLocation(tweet) {
+     //console.log("outside " + tweet.location);
+     var value,
+         //loc = tweet.user.location;
+         loc = (tweet.user.location).trim();
 
-    value = loc.charCodeAt(0);
-    //  loc != null || loc != '' || loc != ' '
+     value = loc.charCodeAt(0);
+     //  loc != null || loc != '' || loc != ' '
 
-    if ((value > 54 && value < 91) || (value > 96 && value < 123)) {
+     if ((value > 54 && value < 91) || (value > 96 && value < 123)) {
 
-        var sql = "INSERT INTO `locations` (`location`) VALUES ('" + loc + "');";
+         var sql = "INSERT INTO `locations` (`location`) VALUES ('" + loc + "');";
 
-        connection.query(sql, function (err, insert) {
-            if (err) {
-                var update = "UPDATE `locations` set `tweets` =  `tweets`+1  where `location` = '" + loc + "';";
-                connection.query(update, function (err, change) {
-                    if (err) {
-                        // ERROR updating
-                        return err;
-                    } else {
-                        // was UPDATED
-                    }
-                });
-            } else {
-                //console.log("Inserted record with id" + result.insertId);
-            }
-        });
-    }
-}
+         connection.query(sql, function (err, insert) {
+             if (err) {
+                 var update = "UPDATE `locations` set `tweets` =  `tweets`+1  where `location` = '" + loc + "';";
+                 connection.query(update, function (err, change) {
+                     if (err) {
+                         // ERROR updating
+                         return err;
+                     } else {
+                         // was UPDATED
+                     }
+                 });
+             } else {
+                 //console.log("Inserted record with id" + result.insertId);
+             }
+         });
+     }
+ }
+
+
 // getting all the tweets for a particular location
 app.get('/api/location/tweets', function (req, res) {
     connection.query('SELECT * FROM `locations` limit 0, 150', function (err, rows) {
@@ -348,7 +341,7 @@ app.get('/api/location/top15locations', function (req, res) {
 });
 
 app.get('/api/comments', function (req, res) {
-    connection.query('SELECT * FROM `comments` ORDER BY `timestamp` DESC limit 0, 4 ', function (err, rows) {
+    connection.query('SELECT * FROM `comments` ORDER BY `timestamp` DESC limit 0, 5 ', function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -364,7 +357,7 @@ app.post('/comments', function (req, res) {
 
 
     if (comment.comments != []) {
-        
+
         if(comment.name != []){
             var sql = "INSERT INTO `comments` (`name`, `comment`) VALUES ('" + comment.name + "','" + comment.comments + "');";
             connection.query(sql, function (err, row) {

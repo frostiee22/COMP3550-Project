@@ -2,16 +2,13 @@
         "use strict";
         $(document).ready(function () {
 
-
+            defineButtons();
 
             setInterval(function(){
                 loadAllComments(function (data) {
                 populateTable(data);
                 });
 	       },5000);
-
-
-
 
         });
 
@@ -60,5 +57,21 @@
         str += ' </li>';
         return str;
     }
+
+
+
+     function defineButtons() {
+        //configure buttons by assigning functionality programatically
+        $("#submitid").click(function () {
+            console.log("sub Button Clicked");
+
+        });
+    }
+
+
+
+
+
+
 
 }(this));
