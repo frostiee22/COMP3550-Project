@@ -108,12 +108,11 @@ io.on('connection', function (socket) {
         io.emit('new tweet', tweet); //Send to client via a push
 
         if (streamOnCheck === true) {
-
             setTimeout(function () {
                 CountHashTags(tweet);
                 CountTweetsInLocation(tweet);
                 streamOnCheck = false;
-            }, 25);
+            }, 20);
 
         }
 
@@ -145,12 +144,12 @@ io.on('connection', function (socket) {
 
     socket.on("start tweets", function () {
         //stream2.stop();
-       // if (stream2 === null) {
+       if (stream2 === null) {
             //Connect to twitter stream passing in filter for entire world.
             twit.stream('statuses/filter', {
                 'locations': '-180,-90,180,90'
-            }, function (stream) {
-                stream.on('data', function (data) {
+            }, function (stream2) {
+                stream2.on('data', function (data) {
                     // Does the JSON result have coordinates
                     if (data.coordinates) {
                         if (data.coordinates !== null) {
@@ -203,11 +202,11 @@ io.on('connection', function (socket) {
                                          });
                 });
             });
-       // }
+        }
     });
 
 
-    socket.emit("connected");
+    io.emit("connected");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
