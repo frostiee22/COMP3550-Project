@@ -27,7 +27,7 @@ var twit = new twitter2({
 
 
 
-app.set('port', (process.env.PORT || port))
+app.set('port', (process.env.PORT || port));
 server.listen(app.get('port'), function () {
     console.log("Listening on http://127.0.0.1:" + app.get('port'));
 });
@@ -122,7 +122,7 @@ io.on('connection', function (socket) {
 
     stream.on('error', function (res) {
         //console.log("error occured");
-    })
+    });
 
 
     socket.on('disconnect', function () {
@@ -149,8 +149,8 @@ io.on('connection', function (socket) {
             //Connect to twitter stream passing in filter for entire world.
             twit.stream('statuses/filter', {
                 'locations': '-180,-90,180,90'
-            }, function (stream2) {
-                stream2.on('data', function (data) {
+            }, function (stream) {
+                stream.on('data', function (data) {
                     // Does the JSON result have coordinates
                     if (data.coordinates) {
                         if (data.coordinates !== null) {
@@ -225,10 +225,6 @@ io.on('connection', function (socket) {
 
  function CountHashTags(tweet) {
 
-
-     var el = tweet.entities;
-
-
      if (tweet.entities != null) {
          if (tweet.entities.hashtags != null) {
              var el = tweet.entities.hashtags;
@@ -298,7 +294,7 @@ app.get('/api/location/tweets', function (req, res) {
             res.json(rows);
         }
     });
-})
+});
 
 
 
@@ -347,7 +343,7 @@ app.get('/api/comments', function (req, res) {
         } else {
             res.json(rows);
         }
-    })
+    });
 });
 
 app.post('/comments', function (req, res) {
@@ -357,9 +353,9 @@ app.post('/comments', function (req, res) {
 
 
     if (comment.comments != []) {
-
+        var sql;
         if(comment.name != []){
-            var sql = "INSERT INTO `comments` (`name`, `comment`) VALUES ('" + comment.name + "','" + comment.comments + "');";
+            sql = "INSERT INTO `comments` (`name`, `comment`) VALUES ('" + comment.name + "','" + comment.comments + "');";
             connection.query(sql, function (err, row) {
                 if (err) {
                     return err;
@@ -368,7 +364,7 @@ app.post('/comments', function (req, res) {
                 }
             });
         }else {
-            var sql = "INSERT INTO `comments` ( `comment`) VALUES ('" + comment.comments + "');";
+            sql = "INSERT INTO `comments` ( `comment`) VALUES ('" + comment.comments + "');";
             connection.query(sql, function (err, row) {
                 if (err) {
                     return err;
@@ -415,7 +411,7 @@ setInterval(function () {
             console.log("removed comments");
         }
     });
-}, 120000);
+}, 14400000);
 
 
 //14400000
@@ -474,7 +470,7 @@ app.post('/register', function (req, res) {
 app.get('/logout', function (req, res) {
     delete req.session.user_id;
     res.redirect('/');
-})
+});
 
 
 app.post('/login', function (req, res) {
@@ -541,7 +537,7 @@ function CheckLogin(username, password, req, res) {
                     if (!err) {
                         console.log("session saved");
                     }
-                })
+                });
                 res.redirect('/home');
 
                 //                var loginstatus = "UPDATE `users` set `loginstatus` = 1 where `username` = '" + username + "' and `password` = '" + password + "';";
@@ -570,7 +566,7 @@ function logout(username, res) {
         } else {
             res.redirect("/");
         }
-    })
+    });
 
 }
 
