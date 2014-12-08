@@ -96,7 +96,7 @@ io.on('connection', function (socket) {
     console.log('User connected ... Starting Stream connection');
 
     if (streamOnCheck === false) {
-        stream.start();
+        //stream.start();
         streamOnCheck = true;
     } else {
 
@@ -348,7 +348,7 @@ app.get('/api/location/top15locations', function (req, res) {
 });
 
 app.get('/api/comments', function (req, res) {
-    connection.query('SELECT * FROM `comments`', function (err, rows) {
+    connection.query('SELECT * FROM `comments` ORDER BY `timestamp` DESC limit 0, 4 ', function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -364,14 +364,26 @@ app.post('/comments', function (req, res) {
 
 
     if (comment.comments != []) {
-        var sql = "INSERT INTO `comments` (`name`, `comment`) VALUES ('" + comment.name + "','" + comment.comments + "');";
-        connection.query(sql, function (err, row) {
-            if (err) {
-                return err;
-            } else {
-                console.log("comment added!");
-            }
-        });
+        
+        if(comment.name != []){
+            var sql = "INSERT INTO `comments` (`name`, `comment`) VALUES ('" + comment.name + "','" + comment.comments + "');";
+            connection.query(sql, function (err, row) {
+                if (err) {
+                    return err;
+                } else {
+                    console.log("comment added!");
+                }
+            });
+        }else {
+            var sql = "INSERT INTO `comments` ( `comment`) VALUES ('" + comment.comments + "');";
+            connection.query(sql, function (err, row) {
+                if (err) {
+                    return err;
+                } else {
+                    console.log("comment added!");
+                }
+            });
+        }
     } else {
         console.log("null comment");
     }
@@ -409,7 +421,7 @@ setInterval(function () {
             console.log("removed comments");
         }
     });
-}, 14400000);
+}, 120000);
 
 
 //14400000

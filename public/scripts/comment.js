@@ -7,12 +7,8 @@
             setInterval(function(){
                 loadAllComments(function (data) {
                 populateTable(data);
-                $("#submit").click(function () {
-                 reset();
-             });
-
-            });
-	           },5000);
+                });
+	       },5000);
 
 
 
@@ -33,7 +29,8 @@
             var tbId = tablebodyid || "commentsList",
                 $tBody = $("#" + tbId);
                 $tBody.empty();
-
+                
+               users.reverse();
             users.forEach(function (el){
                 var rec = transformRec(el);
                 $tBody.append(generateRowHTML(rec));
@@ -53,7 +50,7 @@
 
 
     function generateRowHTML(rec) {
-        var str = '<li>';
+        var str = '<li class="commentList">';
         str += '<div class="commenterImage">';
         str += '<img src = "http://americanmuslimconsumer.com/wp-content/uploads/2013/09/blank-user.jpg"/>';
         str += '</div>';
