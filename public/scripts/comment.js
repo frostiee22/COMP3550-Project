@@ -4,9 +4,9 @@
 
         defineButtons();
 
-        loadAllComments(function(data) {
-            populateTable(data);
-        });
+        // loadAllComments(function(data) {
+        //     populateTable(data);
+        // });
 
         setInterval(function() {
             loadAllComments(function(data) {

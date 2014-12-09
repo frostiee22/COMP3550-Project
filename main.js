@@ -51,22 +51,22 @@ app.use(session({
 
 
 //local database
- // connection = mysql.createConnection({
- //     host: "localhost",
- //     user: "comp3550project",
- //     password: "password",
- //     database: "comp3550project"
- // });
+ connection = mysql.createConnection({
+     host: "localhost",
+     user: "comp3550project",
+     password: "password",
+     database: "comp3550project"
+ });
 
 
 
 // online database
-connection = mysql.createConnection({
-   host: "www.db4free.net",
-   user: "comp3550project",
-   password: "password123",
-   database: "comp3550project"
-});
+// connection = mysql.createConnection({
+//    host: "www.db4free.net",
+//    user: "comp3550project",
+//    password: "password123",
+//    database: "comp3550project"
+// });
 
 connection.connect(function (err) {
     if (err) {
