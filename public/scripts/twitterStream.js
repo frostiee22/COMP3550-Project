@@ -97,6 +97,7 @@
                 styles: light_grey_style
             };
             var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            var tweetCount = 0;
 
             //Setup heat map and link to Twitter array we will append data to
             var heatmap;
@@ -114,13 +115,18 @@
                 // This listens on the "twitter-steam" channel and data is
                 // received everytime a new tweet is receieved.
                 socket.on('twitter-stream', function (data) {
-
+                    
+                    $("#tweetcount").empty();
+                    $("#tweetcount").append('Live Tweet count : ' + tweetCount++ + '');
+                    //tweetCount = tweetCount + 1;
+                    
                     //Add tweet to the heat map array.
                     var tweetLocation = new google.maps.LatLng(data.lng, data.lat);
                     liveTweets.push(tweetLocation);
 
                     //Flash a dot onto the map quickly
-                    var image = "../styles/small-dot-icon.png";
+                   // var image = "../styles/small-dot-icon.png";
+                   var image = "../images/ping.png";
                     var marker = new google.maps.Marker({
                         position: tweetLocation,
                         map: map,
