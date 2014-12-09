@@ -51,22 +51,22 @@ app.use(session({
 
 
 //local database
- connection = mysql.createConnection({
-     host: "localhost",
-     user: "comp3550project",
-     password: "password",
-     database: "comp3550project"
- });
+ // connection = mysql.createConnection({
+ //     host: "localhost",
+ //     user: "comp3550project",
+ //     password: "password",
+ //     database: "comp3550project"
+ // });
 
 
 
 // online database
-//connection = mysql.createConnection({
-//    host: "www.db4free.net",
-//    user: "comp3550project",
-//    password: "password123",
-//    database: "comp3550project"
-//});
+connection = mysql.createConnection({
+   host: "www.db4free.net",
+   user: "comp3550project",
+   password: "password123",
+   database: "comp3550project"
+});
 
 connection.connect(function (err) {
     if (err) {
@@ -112,7 +112,7 @@ io.on('connection', function (socket) {
                 CountHashTags(tweet);
                 CountTweetsInLocation(tweet);
                 streamOnCheck = false;
-            }, 20);
+            }, 25);
 
         }
 
@@ -189,17 +189,17 @@ io.on('connection', function (socket) {
                             }
                         }
                     }
-                                         stream.on('limit', function(limitMessage) {
-                                          return console.log(limitMessage);
-                                         });
-
-                                         stream.on('warning', function(warning) {
-                                           return console.log(warning);
-                                         });
-
-                                         stream.on('disconnect', function(disconnectMessage) {
-                                           return console.log(disconnectMessage);
-                                         });
+//                                         stream.on('limit', function(limitMessage) {
+//                                          return console.log(limitMessage);
+//                                         });
+//
+//                                         stream.on('warning', function(warning) {
+//                                           return console.log(warning);
+//                                         });
+//
+//                                         stream.on('disconnect', function(disconnectMessage) {
+//                                           return console.log(disconnectMessage);
+//                                         });
                 });
             });
         }
