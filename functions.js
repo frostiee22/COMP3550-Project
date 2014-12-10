@@ -1,6 +1,5 @@
 
-var crypto = require('crypto'),
-    salt = "$0m3R@nD0mP@$$w0rD";
+var crypto = require('crypto');
 
 
 function CountHashTags(connection, tweet) {

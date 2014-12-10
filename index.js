@@ -9,6 +9,8 @@ var express = require('express'),
     config = require('./config.json'),
     twitter = new Twitter(config),
     port = 3000,
+    connection,
+    salt = "$0m3R@nD0mP@$$w0rD";
     twitter2 = require('twitter');
 
 
