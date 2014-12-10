@@ -37,10 +37,16 @@
                 <h1>#Tags</h1>
                 <p class="lead">login or register to start using the site</p>
                 <div class="btn-group">
-                    <!--
-          <button id="btnGen" type="button" class="btn btn-default">Gender</button>
-          <button id="btnUnam" type="button" class="btn btn-default">Username</button>
--->
+
+                <h4 id="tweetcount">tweets</h4>
+                <h4 id="lasttag">lasttag</h4>
+                <h4 id="lastmention">lastmention</h4>
+
+          <!-- <button id="amttweets" type="button" class="btn btn-default">tweetcount</button>
+          <button id="lasthash" type="button" class="btn btn-default">tags</button>
+          <button id="lastmention" type="button" class="btn btn-default">mention</button> -->
+
+
                 </div>
             </div>
 
@@ -94,6 +100,7 @@
 
     <!-- build:js({app,.tmp}) scripts/main.js -->
     <script src="scripts/startpage.js"></script>
+    <script src="scripts/socket.io.js"></script>
     <!-- endbuild -->
 </body>
 
