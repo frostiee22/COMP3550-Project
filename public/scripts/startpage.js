@@ -9,8 +9,14 @@
 
             $("#tweetcount").html('tweets : '+ count+ '');
             count = count + 1;
-            LastTags(tweet);
-            LastUserMention(tweet);
+
+            setInterval(function(){
+                LastTags(tweet);
+                LastUserMention(tweet);
+            },500);
+
+
+
         });
 
     });
