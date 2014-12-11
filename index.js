@@ -13,11 +13,11 @@ var express = require('express'),
     twitter2 = require('twitter');
 
 
-    // Imports to be used
-    var FUNCTIONS = require('./functions');
-        DBACCESS = require('./DBConnection');
-        DELETE = require('./DeleteFromDB');
-        USER = require('./User');
+// Imports to be used
+var FUNCTIONS = require('./functions'),
+    DBACCESS = require('./DBConnection'),
+    DELETE = require('./DeleteFromDB'),
+    USER = require('./User');
 
 // key for the google map
 var twit = new twitter2({
@@ -88,7 +88,7 @@ io.on('connection', function (socket) {
         if (streamOnCheck === true) {
             setTimeout(function () {
 
-               FUNCTIONS.CountHashTags(connection, tweet);
+                FUNCTIONS.CountHashTags(connection, tweet);
                 FUNCTIONS.CountTweetsInLocation(connection, tweet);
                 streamOnCheck = false;
             }, 25);
@@ -123,7 +123,7 @@ io.on('connection', function (socket) {
 
     socket.on("start tweets", function () {
         //stream2.stop();
-       if (stream2 === null) {
+        if (stream2 === null) {
             //Connect to twitter stream passing in filter for entire world.
             twit.stream('statuses/filter', {
                 'locations': '-180,-90,180,90'
@@ -142,8 +142,7 @@ io.on('connection', function (socket) {
 
                             //Send out to web sockets channel.
                             socket.emit('twitter-stream', outputPoint);
-                        }
-                        else if (data.place) {
+                        } else if (data.place) {
                             if (data.place.bounding_box === 'Polygon') {
                                 // Calculate the center of the bounding box for the tweet
                                 var coord, _i, _len;
@@ -168,17 +167,17 @@ io.on('connection', function (socket) {
                             }
                         }
                     }
-                                        stream.on('limit', function(limitMessage) {
-                                         return console.log(limitMessage);
-                                        });
+                    stream.on('limit', function (limitMessage) {
+                        return console.log(limitMessage);
+                    });
 
-                                        stream.on('warning', function(warning) {
-                                          return console.log(warning);
-                                        });
+                    stream.on('warning', function (warning) {
+                        return console.log(warning);
+                    });
 
-                                        stream.on('disconnect', function(disconnectMessage) {
-                                          return console.log(disconnectMessage);
-                                        });
+                    stream.on('disconnect', function (disconnectMessage) {
+                        return console.log(disconnectMessage);
+                    });
                 });
             });
         }
@@ -275,7 +274,7 @@ app.post('/comments', function (req, res) {
     if (comment.comments != []) {
         var sql;
         // if a user name was entered
-        if(comment.name != []){
+        if (comment.name != []) {
             sql = "INSERT INTO `comments` (`name`, `comment`) VALUES ('" + comment.name + "','" + comment.comments + "');";
             connection.query(sql, function (err, row) {
                 if (err) {
@@ -323,7 +322,7 @@ app.post('/comments', function (req, res) {
 
 setInterval(function () {
     DELETE.DeleteComments(connection);
-},120000);
+}, 120000);
 
 // 1800000
 

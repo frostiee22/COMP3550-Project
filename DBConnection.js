@@ -1,14 +1,13 @@
-// ************ Database Connection ****************
 var mysql = require("mysql"),
     connection;
 
 //local database
- connection = mysql.createConnection({
-     host: "localhost",
-     user: "comp3550project",
-     password: "password",
-     database: "comp3550project"
- });
+connection = mysql.createConnection({
+    host: "localhost",
+    user: "comp3550project",
+    password: "password",
+    database: "comp3550project"
+});
 
 
 
@@ -29,14 +28,14 @@ connection.connect(function (err) {
 });
 
 
-function returnDBConnection (){
+function returnDBConnection() {
     return connection;
 }
 
-// ******** END Database Connection **********
+
 
 
 
 module.exports = {
-    'returnDBConnection' : returnDBConnection
+    'returnDBConnection': returnDBConnection
 }

@@ -1,4 +1,3 @@
-
 function DeleteTags(connection) {
     connection.query('DELETE FROM `hashtags`WHERE `times` < 5', function (err, rows) {
         if (err) {
@@ -9,7 +8,7 @@ function DeleteTags(connection) {
     });
 }
 
-function DeleteLocTweets(connection){
+function DeleteLocTweets(connection) {
     connection.query('DELETE FROM `locations`WHERE `tweets` < 5', function (err, rows) {
         if (err) {
             return err;
@@ -33,16 +32,16 @@ function DeleteComments(connection) {
 //14400000
 
 
-function RemoveLeastUsed(connection ,num) {
-   connection.query('DELETE FROM `hashtags`WHERE `times` < "' + num + "';", function (err, rows) {
-       console.log("removed rows");
-   });
+function RemoveLeastUsed(connection, num) {
+    connection.query('DELETE FROM `hashtags`WHERE `times` < "' + num + "';", function (err, rows) {
+        console.log("removed rows");
+    });
 }
 
 
 module.exports = {
-    'DeleteTags' : DeleteTags,
-    'DeleteLocTweets' : DeleteLocTweets,
-    'DeleteComments' : DeleteComments,
-    'RemoveLeastUsed' : RemoveLeastUsed
+    'DeleteTags': DeleteTags,
+    'DeleteLocTweets': DeleteLocTweets,
+    'DeleteComments': DeleteComments,
+    'RemoveLeastUsed': RemoveLeastUsed
 }

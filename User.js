@@ -51,14 +51,17 @@ function CheckLogin(connection, username, password, req, res) {
             if (user[0] != null) {
                 console.log("user found");
 
-                req.session.user = {userid: 1, username: user[0].username};
+                req.session.user = {
+                    userid: 1,
+                    username: user[0].username
+                };
 
                 //req.session.user_id = user[0].id;
                 req.session.save(function (err) {
                     if (!err) {
                         console.log("session saved");
                         res.redirect('/home');
-                    }else{
+                    } else {
                         res.status(500).send("unable to create session");
                     }
                 });
@@ -104,9 +107,9 @@ function checkAuth(req, res, next) {
 }
 
 module.exports = {
-    'addUser' : addUser,
-    'checkIfUserExist' : checkIfUserExist,
-    'CheckLogin' : CheckLogin,
-    'logout' : logout,
-    'checkAuth' : checkAuth
+    'addUser': addUser,
+    'checkIfUserExist': checkIfUserExist,
+    'CheckLogin': CheckLogin,
+    'logout': logout,
+    'checkAuth': checkAuth
 }
