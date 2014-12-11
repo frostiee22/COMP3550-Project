@@ -355,7 +355,7 @@ app.post('/register', function (req, res) {
             console.log("user " + newuser.username + " exist");
             res.send("user " + newuser.username + " exist");
         } else {
-            USER.addUser(connection, newuser.username, newuser.password1, salt, 0, res);
+            USER.addUser(connection, newuser.username, newuser.password1, USER.returnSalt(), 0, res);
         }
     } else {
         console.log("passwords do not match up");

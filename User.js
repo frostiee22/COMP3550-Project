@@ -106,10 +106,16 @@ function checkAuth(req, res, next) {
     }
 }
 
+
+function returnSalt(){
+    return salt;
+}
+
 module.exports = {
     'addUser': addUser,
     'checkIfUserExist': checkIfUserExist,
     'CheckLogin': CheckLogin,
     'logout': logout,
-    'checkAuth': checkAuth
+    'checkAuth': checkAuth,
+    'returnSalt' : returnSalt
 }
