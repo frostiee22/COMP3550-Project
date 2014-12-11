@@ -13,8 +13,11 @@ var express = require('express'),
     twitter2 = require('twitter');
 
 
-    // functions to be used
+    // Imports to be used
     var FUNCTIONS = require('./functions');
+        DBACCESS = require('./DBConnection');
+        DELETE = require('./DeleteFromDB');
+        USER = require('./User');
 
 // key for the google map
 var twit = new twitter2({
@@ -46,7 +49,7 @@ app.use(session({
 
 // ************ Database Connection ****************
 
-var DBACCESS = require('./DBConnection');
+
 
 connection = DBACCESS.returnDBConnection();
 
@@ -307,7 +310,7 @@ app.post('/comments', function (req, res) {
 
 // Delete from tables in the database
 
-var DELETE = require('./DeleteFromDB');
+
 
 
 // setInterval(function() {
@@ -337,11 +340,9 @@ setInterval(function () {
 
 // ******************  USER LOG IN ******************************
 
-var USERLOG = require('./User');
 
-app.get('/home', USERLOG.checkAuth, function (req, res) {
+app.get('/home', USER.checkAuth, function (req, res) {
     res.send("priviledge page");
-    console.log("blocked page");
 });
 
 app.post('/register', function (req, res) {
@@ -351,11 +352,11 @@ app.post('/register', function (req, res) {
     newuser.password2 = req.body.loginPassword2;
 
     if (newuser.password1 == newuser.password2) {
-        if (FUNCTIONS.checkIfUserExist(connection, newuser.username)) {
+        if (USER.checkIfUserExist(connection, newuser.username)) {
             console.log("user " + newuser.username + " exist");
             res.send("user " + newuser.username + " exist");
         } else {
-            FUNCTIONS.addUser(connection, newuser.username, newuser.password1, salt, 0, res);
+            USER.addUser(connection, newuser.username, newuser.password1, salt, 0, res);
         }
     } else {
         console.log("passwords do not match up");
@@ -365,7 +366,7 @@ app.post('/register', function (req, res) {
 });
 
 app.get('/logout', function (req, res) {
-    delete req.session.user_id;
+    delete req.session.user;
     res.redirect('/');
 });
 
@@ -375,7 +376,7 @@ app.post('/login', function (req, res) {
     user.username = req.body.loginName;
     user.password = req.body.loginPassword;
 
-    FUNCTIONS.CheckLogin(connection, user.username, user.password, req, res);
+    USER.CheckLogin(connection, user.username, user.password, req, res);
 });
 
 // ******************* END USER LOG IN ****************************
