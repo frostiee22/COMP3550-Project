@@ -20,7 +20,7 @@
 
 
     function loadAllComments(callback) {
-        $.get("/api/comments", function(data) {
+        $.get("/api/comments/0/5", function(data) {
             callback(data);
         });
     }

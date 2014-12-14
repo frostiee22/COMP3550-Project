@@ -252,9 +252,11 @@ app.get('/api/location/top15locations', function (req, res) {
     });
 });
 
-// getting the latest 5 comments
-app.get('/api/comments', function (req, res) {
-    connection.query('SELECT * FROM `comments` ORDER BY `timestamp` DESC limit 0, 5 ', function (err, rows) {
+// getting coment from newest
+app.get('/api/comments/:start/:end', function (req, res) {
+    var start = req.param("start"),
+        end = req.param("end");
+    connection.query('SELECT * FROM `comments` ORDER BY `timestamp` DESC limit ' + start + ',' + end, function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -262,7 +264,6 @@ app.get('/api/comments', function (req, res) {
         }
     });
 });
-
 
 // adding comments to the Database
 app.post('/comments', function (req, res) {
