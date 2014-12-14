@@ -49,6 +49,7 @@
             <h1>#Tags</h1>
             <p class="lead">Showing the amount of times a #tag was used</p>
             <div class="btn-group">
+                <button id="btnLive" type="button" class="btn btn-default">Live Tweets</button>
                 <button id="btnAll" type="button" class="btn btn-default">All</button>
                 <button id="btnTop15" type="button" class="btn btn-default">Top 15</button>
                 <!--
@@ -62,19 +63,12 @@
             <div class="col-md-12">
                 <!-- <div id="tweet_logs"></div> -->
                 <table class="table table-striped" id="mainTbl" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>tags</th>
-                            <th>count</th>
-                            <!--
-				<th>screen name</th>
-				<th>friend</th>
-				<th>User Location</th>
-				<th>Timestamp</th>
-				-->
-                        </tr>
+                    <thead id="tblHead">
+                        <!--Table head-->
                     </thead>
+
                     <tbody id="tblBody">
+                        <!--Table body-->
                     </tbody>
                 </table>
             </div>

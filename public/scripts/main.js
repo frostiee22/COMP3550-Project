@@ -11,6 +11,9 @@
         });
 
         loadAllRecs(function (data) {
+            var tbH = "tblHead",
+            $tHead = $("#" + tbH);
+            $tHead.append("<tr><th>tags</th><th>count</th></tr>");
             populateTable(data);
         });
 
@@ -57,8 +60,11 @@
 
     function removeTable(tablebodyid) {
         var tbId = tablebodyid || "tblBody",
-            $tBody = $("#" + tbId);
+            $tBody = $("#" + tbId),
+            tbH = "tblHead",
+            $tHead = $("#" + tbH);
 
+        $tHead.empty();
         $tBody.empty();
     }
 
@@ -85,6 +91,11 @@
             console.log("All Button Clicked");
             loadAllRecs(function (data) {
                 removeTable(); // Remove records before adding new records
+
+                var tbH = "tblHead",
+                    $tHead = $("#" + tbH);
+
+            $tHead.append("<tr><th>tags</th><th>count</th></tr>");
                 populateTable(data);
             });
         });
@@ -92,6 +103,11 @@
             console.log("top15 Button Clicked");
             loadTop15(function (data) {
                 removeTable(); // Remove records before adding new records
+
+                var tbH = "tblHead",
+                $tHead = $("#" + tbH);
+
+                $tHead.append("<tr><th>tags</th><th>count</th></tr>");
                 populateTable(data);
             });
 
