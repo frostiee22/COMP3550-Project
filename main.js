@@ -88,6 +88,10 @@ var stream2 = null;
 
 var streamOnCheck = false;
 
+setInterval(function(){
+    streamOnCheck = true;
+},2500);
+
 
 
 io.on('connection', function (socket) {
@@ -108,11 +112,12 @@ io.on('connection', function (socket) {
         io.emit('new tweet', tweet); //Send to client via a push
 
         if (streamOnCheck === true) {
-            setTimeout(function () {
+            //setTimeout(function () {
+                console.log("send");
                 CountHashTags(tweet);
                 CountTweetsInLocation(tweet);
                 streamOnCheck = false;
-            }, 25);
+            //}, 25);
 
         }
 

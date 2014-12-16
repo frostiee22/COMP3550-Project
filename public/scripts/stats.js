@@ -11,19 +11,19 @@
     });
 
     function loadLocationTweets(callback) {
-        $.get('/api/location/tweets', function (data) {
+        $.get('/api/location/tweets/0/150', function (data) {
             callback(data);
         });
     }
 
     function loadTop15Tags(callback) {
-        $.get('/api/hashtags/top15tags', function (data) {
+        $.get('/api/hashtags/DESC/0/15', function (data) {
             callback(data);
         });
     }
 
     function loadTop15Locations(callback) {
-        $.get('/api/location/top15locations', function (data) {
+        $.get('/api/location/DESC/0/15', function (data) {
             callback(data);
         })
     }

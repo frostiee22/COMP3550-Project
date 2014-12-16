@@ -64,19 +64,15 @@ var stream = twitter.stream('statuses/sample', {
 
 var stream2 = null;
 
-var streamOnCheck = false;
+var streamOnCheck;
 
+setInterval(function(){
+    streamOnCheck = true;
+},1500);
 
 
 io.on('connection', function (socket) {
     console.log('User connected ... Starting Stream connection');
-
-    if (streamOnCheck === false) {
-        //stream.start();
-        streamOnCheck = true;
-    } else {
-        // do nothing
-    }
 
 
     //In order to minimise API usage, we only start stream from twitter when user connected
@@ -86,13 +82,9 @@ io.on('connection', function (socket) {
         io.emit('new tweet', tweet); //Send to client via a push
 
         if (streamOnCheck === true) {
-            setTimeout(function () {
-
                 FUNCTIONS.CountHashTags(connection, tweet);
                 FUNCTIONS.CountTweetsInLocation(connection, tweet);
                 streamOnCheck = false;
-            }, 25);
-
         }
 
     });
@@ -105,13 +97,6 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log("++++++++++++++ User disconnected  +++++++++++++++");
-        if (streamOnCheck === true) {
-            //stream.stop();
-            streamOnCheck = false;
-        } else {
-            // do nothing
-        }
-
     });
 
 
@@ -201,9 +186,11 @@ io.on('connection', function (socket) {
 
 
 
-// getting all the tweets for a particular location
-app.get('/api/location/tweets', function (req, res) {
-    connection.query('SELECT * FROM `locations` limit 0, 150', function (err, rows) {
+// showing tweets in locations
+app.get('/api/location/tweets/:start/:end', function (req, res) {
+    var start =  req.param("start"),
+        end = req.param("end");
+    connection.query('SELECT * FROM `locations` limit ' + start + ',' + end, function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -230,8 +217,11 @@ app.get('/api/hashtags', function (req, res) {
 
 
 // getting the top 15 most used tags
-app.get('/api/hashtags/top15tags', function (req, res) {
-    connection.query('SELECT * FROM `hashtags` ORDER BY `times` DESC limit 0, 15 ', function (err, rows) {
+app.get('/api/hashtags/DESC/:start/:end', function (req, res) {
+     var start =  req.param("start"),
+        end = req.param("end");
+
+    connection.query('SELECT * FROM `hashtags` ORDER BY `times` DESC limit '+ start + ',' + end, function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -242,8 +232,11 @@ app.get('/api/hashtags/top15tags', function (req, res) {
 });
 
 // getting the top 15 locations
-app.get('/api/location/top15locations', function (req, res) {
-    connection.query('SELECT * FROM `locations` ORDER BY `tweets` DESC limit 0, 15 ', function (err, rows) {
+app.get('/api/location/DESC/:start/:end', function (req, res) {
+     var start =  req.param("start"),
+        end = req.param("end");
+
+    connection.query('SELECT * FROM `locations` ORDER BY `tweets` DESC limit '+ start +',' + end, function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -256,6 +249,7 @@ app.get('/api/location/top15locations', function (req, res) {
 app.get('/api/comments/:start/:end', function (req, res) {
     var start = req.param("start"),
         end = req.param("end");
+
     connection.query('SELECT * FROM `comments` ORDER BY `timestamp` DESC limit ' + start + ',' + end, function (err, rows) {
         if (err) {
             return err;
@@ -313,17 +307,17 @@ app.post('/comments', function (req, res) {
 
 
 
-// setInterval(function() {
-//     DELETE.DeleteTags(connection);
-// }, 11000);
+ setInterval(function() {
+     DELETE.DeleteTags(connection);
+ }, 3300000);
 
-// setInterval(function (){
-//     DELETE.DeleteLocTweets(connection);
-// }, 23000);
+ setInterval(function (){
+     DELETE.DeleteLocTweets(connection);
+ }, 3000000);
 
 setInterval(function () {
     DELETE.DeleteComments(connection);
-}, 120000);
+}, 2700000);
 
 // 1800000
 
