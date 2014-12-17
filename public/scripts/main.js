@@ -5,12 +5,12 @@
             check = 0;
 
         // incomming twitter stream form the server
-            socket.on('new tweet', function (tweet) {
-                if (check == 0) {
-                    //console.log(tweet);
-                    check = 1;
-                }
-            });
+        socket.on('new tweet', function (tweet) {
+            if (check == 0) {
+                //console.log(tweet);
+                check = 1;
+            }
+        });
 
 
         setInterval(function () {
@@ -21,11 +21,27 @@
 
 
         loadAllHashTags(function (data) {
-            var tbH = "tblHead",
+            var tbH = "hashtagsHead",
                 $tHead = $("#" + tbH);
             $tHead.append("<tr><th>tags</th><th>count</th></tr>");
-            populateTable(data);
+            populateTable(data, "hashtags", "hashtagsBody");
+
+            $("#hashtags").dataTable({
+                "pagingType": "full_numbers"
+            });
         });
+
+        LoadAllLocations(function (data) {
+            var tbH = "locationsHead",
+                $tHead = $("#" + tbH);
+            $tHead.append("<tr><th>locations</th><th>count</th></tr>");
+            populateTable(data, "locations", "locationsBody");
+
+
+            $("#locations").dataTable({
+                "pagingType": "full_numbers"
+            });
+        })
 
         defineTableButtons();
 
@@ -47,7 +63,9 @@
             $tBody.append(generateRowHTML(rec));
         });
 
-        $tbl.dataTable();
+//        $tbl.dataTable({
+//            "pagingType": "full_numbers"
+//        });
 
 
 
@@ -78,10 +96,10 @@
     }
 
 
-    function removeTable(tablebodyid) {
+    function removeTable(tableheadid, tablebodyid) {
         var tbId = tablebodyid || "tblBody",
             $tBody = $("#" + tbId),
-            tbH = "tblHead",
+            tbH = tableheadid || "tblHead",
             $tHead = $("#" + tbH);
 
         $tHead.empty();
@@ -111,14 +129,14 @@
             $("#info").empty();
             $("#info").append("Showing the amount of times a #tag was used");
 
-            // Remove records before adding new records
-            removeTable();
-            loadAllHashTags(function (data) {
+            var tbH = "hashtagsHead",
+                $tHead = $("#" + tbH);
 
-                var tbH = "tblHead",
-                    $tHead = $("#" + tbH);
+            // Remove records before adding new records
+            removeTable(tbH, "hashtagsBody");
+            loadAllHashTags(function (data) {
                 $tHead.append("<tr><th>tags</th><th>count</th></tr>");
-                populateTable(data);
+                populateTable(data, "hashtags", "hashtagsBody");
             });
         });
 
@@ -127,13 +145,14 @@
             $("#info").empty();
             $("#info").append("Showing amount of tweets in a location");
 
+            var tbH = "locationsHead",
+                $tHead = $("#" + tbH);
+
             // Remove records before adding new records
-            removeTable();
+            removeTable(tbH, "locationsBody");
             LoadAllLocations(function (data) {
-                var tbH = "tblHead",
-                    $tHead = $("#" + tbH);
                 $tHead.append("<tr><th>locations</th><th>count</th></tr>");
-                populateTable(data);
+                populateTable(data, "locations", "locationsBody");
             });
         });
     }

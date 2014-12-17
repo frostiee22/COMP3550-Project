@@ -1,5 +1,5 @@
 function DeleteTags(connection) {
-    connection.query('DELETE FROM `hashtags`WHERE `times` < 5', function (err, rows) {
+    connection.query('DELETE FROM `hashtags`WHERE `times` < 100', function (err, rows) {
         if (err) {
             return err;
         } else {
@@ -9,7 +9,7 @@ function DeleteTags(connection) {
 }
 
 function DeleteLocTweets(connection) {
-    connection.query('DELETE FROM `locations`WHERE `tweets` < 5', function (err, rows) {
+    connection.query('DELETE FROM `locations`WHERE `tweets` < 100', function (err, rows) {
         if (err) {
             return err;
         } else {

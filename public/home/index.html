@@ -29,7 +29,8 @@
 		<![endif]-->
     <div class="container">
         <ul class="nav nav-pills pull-right">
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="/logout">Logout</a>
+            </li>
         </ul>
         <hr />
         <div class="header">
@@ -47,10 +48,12 @@
         </div>
         <div class="jumbotron">
             <h1>#Tags</h1>
-            <p class="lead" id="info">Showing the amount of times a #tag was used</p>
+            <p class="lead" id="info">Tables containing analyse tweet data</p>
             <div class="btn-group">
+                <!--
                 <button id="btnAll" type="button" class="btn btn-default">HashTags</button>
                 <button id="btnTop15" type="button" class="btn btn-default">Locations</button>
+-->
                 <!--
 	<button id="btnGen" type="button" class="btn btn-default">Gender</button>
 	<button id="btnUnam" type="button" class="btn btn-default">Username</button>
@@ -61,17 +64,35 @@
         <div class="row marketing">
             <div class="col-md-12">
                 <!-- <div id="tweet_logs"></div> -->
-                <table class="table table-striped" id="mainTbl" cellspacing="0" width="100%">
-                    <thead id="tblHead">
+                <h4 align="center">Table showing the amount of times a #tag was used</h4>
+                <br/>
+                <table class="table table-striped" id="hashtags" cellspacing="0" width="100%">
+                    <thead id="hashtagsHead">
                         <!--Table head-->
                     </thead>
 
-                    <tbody id="tblBody">
+                    <tbody id="hashtagsBody">
+                        <!--Table body-->
+                    </tbody>
+                </table>
+                <br/>
+                <hr/>
+                <br/>
+                <h4 align="center">Table showing the amount of tweets for a location</h4>
+                <br/>
+                <table class="table table-striped" id="locations" cellspacing="0" width="100%">
+                    <thead id="locationsHead">
+                        <!--Table head-->
+                    </thead>
+
+                    <tbody id="locationsBody">
                         <!--Table body-->
                     </tbody>
                 </table>
             </div>
         </div>
+        <br/>
+        <br/>
         <div class="row">
             <div id="chartSec" class="col-md-6">
             </div>
