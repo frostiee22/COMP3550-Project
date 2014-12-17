@@ -68,7 +68,7 @@ var streamOnCheck;
 
 setInterval(function () {
     streamOnCheck = true;
-}, 100);
+}, 250);
 
 
 io.on('connection', function (socket) {

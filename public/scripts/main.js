@@ -114,7 +114,7 @@
     }
 
     function LoadAllLocations(callback) {
-        $.get("/api/location/tweets/0/150", function (data) {
+        $.get("/api/location/tweets/0/10000", function (data) {
             callback(data);
         });
     }

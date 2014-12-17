@@ -12,12 +12,6 @@
         }, 2500);
 
         socket.on('new tweet', function (tweet) {
-
-//            $("#tweetcount").html('tweets : ' + count + '');
-//            count = count + 1;
-//            LastTags(tweet);
-//            LastUserMention(tweet);
-
             if (check == 0) {
                 LiveTweets("livetweets", tweet);
                 check = 1;
@@ -30,10 +24,14 @@
     });
 
 
-    function LiveTweets(id, tweet) {
-        $("#" + id).empty();
-        $("#" + id).append("<tr><th>name</th><th>message</th><th>location</th></tr>");
-        $("#" + id).append("<tr><td>" + tweet.user.name + "</td><td>" + tweet.text + "</td><td>" + tweet.user.location + "</td></tr>");
+//    function LiveTweets(id, tweet) {
+//        $("#" + id).empty();
+//        $("#" + id).append("<tr><th>name</th><th>message</th><th>location</th></tr>");
+//        $("#" + id).append("<tr><td>" + tweet.user.name + "</td><td>" + tweet.text + "</td><td>" + tweet.user.location + "</td></tr>");
+//    }
+
+     function LiveTweets(id, tweet) {
+        $("#" + id).html('<tr><td><img src='+ tweet.user.profile_image_url +' width="60" class="img-circle" /></td><td><h4>' + tweet.text + ' </h4></td></tr>');
     }
 
 
