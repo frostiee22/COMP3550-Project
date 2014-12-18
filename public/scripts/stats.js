@@ -2,10 +2,10 @@
     $(document).ready(function () {
         defineChartButtons();
 
-//        loadLocationTweets(function (data) {
-//            var recs = data.map(transformRec)
-//            drawColumnChartByLocation(recs);
-//        });
+        //        loadLocationTweets(function (data) {
+        //            var recs = data.map(transformRec)
+        //            drawColumnChartByLocation(recs);
+        //        });
 
 
     });
@@ -158,6 +158,7 @@
     function defineChartButtons() {
         $("#btnChartLocation").click(function () {
             console.log("Locations Button Clicked");
+            $(".lead").html("Bar chart showing amount of tweets in a particular location");
             loadLocationTweets(function (data) {
                 var recs = data.map(transformRec)
                 drawColumnChartByLocation(recs);
@@ -166,6 +167,7 @@
 
         $("#btnChartTop15Locations").click(function () {
             console.log("Top15Locations Button Clicked");
+            $(".lead").html("Pie chart showing the top 15 locations");
             loadTop15Locations(function (data) {
                 drawColumnChartByTop15Locations(data);
             });
@@ -174,6 +176,8 @@
 
         $("#btnChartTop15Tags").click(function () {
             console.log("Top15Tags Button Clicked");
+            $(".lead").html("Pie chart showing the top 15 hashtags used");
+
             loadTop15Tags(function (data) {
                 drawPieChartByTop15Tags(data);
             });

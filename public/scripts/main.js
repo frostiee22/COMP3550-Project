@@ -43,7 +43,7 @@
             });
         })
 
-        defineTableButtons();
+        //defineTableButtons();
 
     });
 
@@ -122,40 +122,40 @@
 
 
 
-    function defineTableButtons() {
-        //configure buttons by assigning functionality programatically
-        $("#btnAll").click(function () {
-            console.log("All Button Clicked");
-            $("#info").empty();
-            $("#info").append("Showing the amount of times a #tag was used");
-
-            var tbH = "hashtagsHead",
-                $tHead = $("#" + tbH);
-
-            // Remove records before adding new records
-            removeTable(tbH, "hashtagsBody");
-            loadAllHashTags(function (data) {
-                $tHead.append("<tr><th>tags</th><th>count</th></tr>");
-                populateTable(data, "hashtags", "hashtagsBody");
-            });
-        });
-
-        $("#btnTop15").click(function () {
-            console.log("top15 Button Clicked");
-            $("#info").empty();
-            $("#info").append("Showing amount of tweets in a location");
-
-            var tbH = "locationsHead",
-                $tHead = $("#" + tbH);
-
-            // Remove records before adding new records
-            removeTable(tbH, "locationsBody");
-            LoadAllLocations(function (data) {
-                $tHead.append("<tr><th>locations</th><th>count</th></tr>");
-                populateTable(data, "locations", "locationsBody");
-            });
-        });
-    }
+//    function defineTableButtons() {
+    //        //configure buttons by assigning functionality programatically
+    //        $("#btnAll").click(function () {
+    //            console.log("All Button Clicked");
+    //            $("#info").empty();
+    //            $("#info").append("Showing the amount of times a #tag was used");
+    //
+    //            var tbH = "hashtagsHead",
+    //                $tHead = $("#" + tbH);
+    //
+    //            // Remove records before adding new records
+    //            removeTable(tbH, "hashtagsBody");
+    //            loadAllHashTags(function (data) {
+    //                $tHead.append("<tr><th>tags</th><th>count</th></tr>");
+    //                populateTable(data, "hashtags", "hashtagsBody");
+    //            });
+    //        });
+    //
+    //        $("#btnTop15").click(function () {
+    //            console.log("top15 Button Clicked");
+    //            $("#info").empty();
+    //            $("#info").append("Showing amount of tweets in a location");
+    //
+    //            var tbH = "locationsHead",
+    //                $tHead = $("#" + tbH);
+    //
+    //            // Remove records before adding new records
+    //            removeTable(tbH, "locationsBody");
+    //            LoadAllLocations(function (data) {
+    //                $tHead.append("<tr><th>locations</th><th>count</th></tr>");
+    //                populateTable(data, "locations", "locationsBody");
+    //            });
+    //        });
+    //    }
 
 
 
