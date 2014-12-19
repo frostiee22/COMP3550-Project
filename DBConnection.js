@@ -10,7 +10,6 @@ var mysql = require("mysql"),
 //});
 
 
-
 // online database
  connection = mysql.createConnection({
      host: "www.db4free.net",
@@ -18,6 +17,7 @@ var mysql = require("mysql"),
      password: "password123",
      database: "comp3550project"
  });
+
 
 connection.connect(function (err) {
     if (err) {
