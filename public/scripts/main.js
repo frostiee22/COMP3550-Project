@@ -27,7 +27,8 @@
             populateTable(data, "hashtags", "hashtagsBody");
 
             $("#hashtags").dataTable({
-                "pagingType": "full_numbers"
+                "pagingType": "full_numbers",
+                "order": [[ 1, "desc" ]]
             });
         });
 
@@ -39,7 +40,8 @@
 
 
             $("#locations").dataTable({
-                "pagingType": "full_numbers"
+                "pagingType": "full_numbers",
+                "order": [[ 1, "desc" ]]
             });
         })
 

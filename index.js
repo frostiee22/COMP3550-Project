@@ -66,6 +66,7 @@ var stream2 = null;
 
 var streamOnCheck;
 
+// pushing to the database
 setInterval(function () {
     streamOnCheck = true;
 }, 250);
