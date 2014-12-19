@@ -314,11 +314,11 @@ setInterval(function () {
 
 setInterval(function () {
     DELETE.DeleteLocTweets(connection);
-}, 900000);
+}, 9000000);
 
 setInterval(function () {
     DELETE.DeleteComments(connection);
-}, 600000);
+}, 6000000);
 
 // 1800000
 
