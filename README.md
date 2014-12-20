@@ -1,3 +1,11 @@
 # COMP3550 Project - Twitter data
 
-this project involves obtaining live twitter data and counting the amount of times a particular hashtag was used
+to run use
+npm install 
+then
+node index.js
+
+
+use log in info as
+username : mitra
+password: kalloo
