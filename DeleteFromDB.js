@@ -31,10 +31,23 @@ function DeleteComments(connection) {
 
 //14400000
 
+function DeleteAmtLocations(connection, num){
+    connection.query('DELETE FROM `locations`WHERE `tweets`< ' + num, function (err, rows) {
+        if (err) {
+            return console.log(err);
+        } else {
+            console.log("removed locations");
+        }
+    });
+}
 
-function RemoveLeastUsed(connection, num) {
-    connection.query('DELETE FROM `hashtags`WHERE `times` < "' + num + "';", function (err, rows) {
-        console.log("removed rows");
+function DeleteAmtTags(connection, num) {
+    connection.query('DELETE FROM `hashtags`WHERE `times` < ' + num, function (err, rows) {
+       if (err) {
+            return console.log(err);
+        } else {
+            console.log("removed Tags");
+        }
     });
 }
 
@@ -43,5 +56,6 @@ module.exports = {
     'DeleteTags': DeleteTags,
     'DeleteLocTweets': DeleteLocTweets,
     'DeleteComments': DeleteComments,
-    'RemoveLeastUsed': RemoveLeastUsed
+    'DeleteAmtLocations' : DeleteAmtLocations,
+    'DeleteAmtTags' : DeleteAmtTags
 }

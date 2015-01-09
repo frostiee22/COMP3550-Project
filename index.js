@@ -69,7 +69,7 @@ var streamOnCheck;
 // pushing to the database
 setInterval(function () {
     streamOnCheck = true;
-}, 250);
+}, 200);
 
 
 io.on('connection', function (socket) {
@@ -308,18 +308,31 @@ app.post('/comments', function (req, res) {
 
 
 
-setInterval(function () {
-    DELETE.DeleteTags(connection);
-}, 1200000);
+// setInterval(function () {
+//     DELETE.DeleteTags(connection);
+// }, 1200000);
 
-setInterval(function () {
-    DELETE.DeleteLocTweets(connection);
-}, 9000000);
+// setInterval(function () {
+//     DELETE.DeleteLocTweets(connection);
+// }, 9000000);
+
+// setInterval(function () {
+//     DELETE.DeleteComments(connection);
+// }, 6000000);
+
 
 setInterval(function () {
     DELETE.DeleteComments(connection);
-}, 6000000);
+}, 3600000);
 
+setInterval(function(){
+	DELETE.DeleteAmtTags(connection, 11);
+},3540000);
+// 18000000
+
+setInterval(function(){
+	DELETE.DeleteAmtLocations(connection, 11);
+},3300000);
 // 1800000
 
 //14400000
