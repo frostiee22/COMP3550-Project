@@ -11,7 +11,7 @@
     });
 
     function loadLocationTweets(callback) {
-        $.get('/api/location/tweets/0/150', function (data) {
+        $.get('/api/location/tweets/0/5000', function (data) {
             callback(data);
         });
     }
